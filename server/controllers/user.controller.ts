@@ -12,6 +12,7 @@ import sendEmail from "../utils/sendMail";
 import { sendToken } from "../utils/jwt";
 import { redis } from "../utils/redis";
 import { getUserById } from "../services/user.service";
+import cloudinary from "cloudinary";
 
 dotenv.config();
 const ACTIVATION_SECRET = process.env.ACTIVATION_SECRET;
@@ -210,6 +211,8 @@ export const updateAccessToken = catchAsyncError(
         expiresIn: "3d",
       });
 
+      req.user = user;
+
       res.cookie("access_token", accessToken, accessTokenOptions);
       res.cookie("refresh_token", refreshToken, refreshTokenOptions);
 
@@ -252,6 +255,126 @@ export const socialAuth = catchAsyncError(
       } else {
         sendToken(user, 200, res);
       }
+    } catch (error: any) {}
+  }
+);
+
+interface UpdateUserInterface {
+  name?: string;
+  email?: string;
+}
+export const updateUserInfo = catchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email, name } = req.body as UpdateUserInterface;
+      const userId = req.user?._id;
+
+      const user = await userModel.findById(userId);
+      if (email && user) {
+        const isEmailExist = await userModel.findOne({ email });
+        if (isEmailExist) {
+          return next(new ErrorHandler("Email already exists", 400));
+        }
+        user.email = email;
+      }
+      if (name && user) {
+        user.name = name;
+      }
+
+      await user?.save();
+      await redis.set(userId, JSON.stringify(user));
+      res.status(201).json({
+        success: true,
+        user,
+      });
+    } catch (error: any) {}
+  }
+);
+
+interface ChangePasswordInterface {
+  oldPassword: string;
+  newPassword: string;
+}
+export const changePassword = catchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { oldPassword, newPassword } = req.body as ChangePasswordInterface;
+      const user = await userModel.findById(req.user?._id).select("+password");
+
+      if (!oldPassword || !newPassword) {
+        return next(
+          new ErrorHandler(
+            "please enter your old and new password correctly",
+            400
+          )
+        );
+      }
+
+      if (user?.password === undefined) {
+        return next(new ErrorHandler("Invalid user", 400));
+      }
+      const isPasswordMatch = await user?.comparePassword(oldPassword);
+      if (!isPasswordMatch) {
+        return next(new ErrorHandler("Invalid Old password", 400));
+      }
+      user.password = newPassword;
+      await user.save();
+      await redis.set(req.user?._id, JSON.stringify(user));
+
+      res.status(200).json({
+        success: true,
+        user,
+      });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+interface ChangeProfilePictureInterface {
+  avatar: string;
+}
+// change profile picture
+export const changeProfilePicture = catchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { avatar } = req.body as ChangeProfilePictureInterface;
+      const userId = req.user?._id;
+      const user = await userModel.findById(userId);
+
+      if (avatar && user) {
+        // if already have an avatar
+        if (user?.avatar?.public_id) {
+          //first delete the avatar
+          await cloudinary.v2.uploader.destroy(user?.avatar?.public_id);
+          // then change the avatar
+          const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+            folder: "Learnbay-user-avatars",
+            width: 150,
+          });
+          user.avatar = {
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
+          };
+        } else {
+          const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+            folder: "Learnbay-user-avatars",
+            width: 150,
+          });
+          user.avatar = {
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
+          };
+        }
+      }
+
+      await user?.save();
+      await redis.set(userId, JSON.stringify(user));
+
+      res.status(200).json({
+        success: true,
+        user,
+      });
     } catch (error: any) {}
   }
 );

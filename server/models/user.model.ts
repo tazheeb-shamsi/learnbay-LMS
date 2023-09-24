@@ -83,16 +83,17 @@ UserSchema.pre<UserInterface>("save", async function (next) {
 
 // sign access token
 UserSchema.methods.SignAccessToken = function () {
-  return JWT.sign({ id: this._id }, ACCESS_TOKEN || '', {
-    expiresIn:"5m"
+  return JWT.sign({ id: this._id }, ACCESS_TOKEN || "", {
+    expiresIn: "5m",
   });
-}
+};
+
 // sign refresh token
 UserSchema.methods.SignRefreshToken = function () {
   return JWT.sign({ id: this._id }, REFRESH_TOKEN || "", {
     expiresIn: "3d",
   });
-}
+};
 
 // compair password
 UserSchema.methods.comparePassword = async function (
