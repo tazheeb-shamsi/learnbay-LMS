@@ -3,6 +3,8 @@ import {
   addAnswerToTheQuestion,
   addCourse,
   addQuestion,
+  addReplyToReview,
+  addReview,
   getAllCourse,
   getCourseContentByUser,
   getSingleCourse,
@@ -35,8 +37,17 @@ courseRoute.get(
   isAuthenticated,
   getCourseContentByUser
 );
-
+//add question & answer
 courseRoute.put("/add-question", isAuthenticated, addQuestion);
 courseRoute.put("/add-answer", isAuthenticated, addAnswerToTheQuestion);
+
+//add review to the course
+courseRoute.put("/add-review/:id", isAuthenticated, addReview);
+courseRoute.put(
+  "/add-review-reply",
+  isAuthenticated,
+  authorizeRoles("admin"),
+  addReplyToReview
+);
 
 export default courseRoute;

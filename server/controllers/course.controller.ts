@@ -220,7 +220,6 @@ interface answerToTheQuestionInterface {
   contentId: string;
   questionId: string;
 }
-
 export const addAnswerToTheQuestion = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -259,7 +258,7 @@ export const addAnswerToTheQuestion = catchAsyncError(
 
       //some validations have been performed
       if (req.user?._id === question.user._id) {
-        //create a notification
+        //TODO:  create a notification
       } else {
         const data = {
           name: question.user.name,
@@ -283,6 +282,115 @@ export const addAnswerToTheQuestion = catchAsyncError(
         }
       }
 
+      res.status(200).json({
+        status: "true",
+        course,
+      });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
+);
+
+// adding review to the course
+interface reviewInterface {
+  review: string;
+  courseId: string;
+  rating: number;
+  userId: string;
+}
+
+export const addReview = catchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userCourseList = req.user?.courses;
+      const courseId = req.params.id;
+
+      const isCourseExist = userCourseList?.some(
+        (course: any) => course._id.toString() === courseId.toString()
+      );
+
+      if (!isCourseExist) {
+        return next(
+          new ErrorHandler("Purchase this course to add review.", 404)
+        );
+      }
+      const course = await courseModel.findById(courseId);
+      const { review, rating } = req.body as reviewInterface;
+
+      const reviewData: any = {
+        user: req.user,
+        comment: review,
+        rating: rating,
+      };
+
+      course?.reviews.push(reviewData);
+
+      let average = 0;
+      course?.reviews.forEach((rev: any) => {
+        average += rev.rating;
+      });
+
+      if (course) {
+        course.ratings = average / course.reviews.length;
+        // eg. if we have two revies 4&5  ==> (4+5)/2 = 4.5 rating
+      }
+
+      await course?.save();
+
+      const notification = {
+        title: "New Review Recieved",
+        message: `${req.user?.name} has added a review on ${course?.name}`,
+      };
+
+      //TODO:  create a notification
+
+      res.status(200).json({
+        status: "true",
+        course,
+      });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
+);
+
+// add reply to review
+interface AddReviewDataInterface {
+  comment: string;
+  courseId: string;
+  reviewId: string;
+}
+
+export const addReplyToReview = catchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { comment, courseId, reviewId } =
+        req.body as AddReviewDataInterface;
+      const course = await courseModel.findById(courseId);
+
+      if (!course) {
+        new ErrorHandler("Course not found.", 404);
+      }
+
+      const review = course?.reviews?.find(
+        (rev: any) => rev._id.toString() === reviewId
+      );
+      if (!review) {
+        new ErrorHandler("Review not found.", 404);
+      }
+
+      const replyData: any = {
+        user: req.user,
+        comment,
+      };
+
+      if (!review.commentReplies) {
+        review.commentReplies = [];
+      }
+
+      review?.commentReplies.push(replyData);
+      await course?.save();
       res.status(200).json({
         status: "true",
         course,

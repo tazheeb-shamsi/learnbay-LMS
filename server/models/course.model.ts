@@ -1,16 +1,16 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 import { UserInterface } from "./user.model";
 
-interface questionInterface extends Document {
+interface CommentInterface extends Document {
   user: UserInterface;
   question: string;
-  questionReplies: questionInterface[];
+  questionReplies: CommentInterface[];
 }
 interface ReviewInterface extends Document {
-  user: object;
+  user: UserInterface;
   rating: number;
   comment: string;
-  commentReplies: questionInterface[];
+  commentReplies: CommentInterface[];
 }
 interface LinkInterface extends Document {
   title: string;
@@ -25,7 +25,7 @@ interface CourseDataInterface extends Document {
   videoDuration: number;
   videoPlayer: string;
   links: LinkInterface[];
-  questions: questionInterface[];
+  questions: CommentInterface[];
   suggestions: string;
 }
 
@@ -53,6 +53,7 @@ const reviewSchema = new Schema<ReviewInterface>({
     default: 0,
   },
   comment: String,
+  commentReplies: [Object],
 });
 
 const linkSchema = new Schema<LinkInterface>({
@@ -60,7 +61,7 @@ const linkSchema = new Schema<LinkInterface>({
   url: String,
 });
 
-const questionSchema = new Schema<questionInterface>({
+const questionSchema = new Schema<CommentInterface>({
   user: Object,
   question: String,
   questionReplies: [Object],
