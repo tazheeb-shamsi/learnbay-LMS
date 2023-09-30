@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Learnbay : A new response added to your question</title>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style type="text/css">
+      body {
+        margin: 0;
+        padding: 0;
+        min-width: 100%;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+        background-color: #edecec;
+        color: #222222;
+      }
+      a {
+        color: #000;
+        text-align: none;
+      }
+      h1 {
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1.25;
+        margin-top: 0;
+        margin-bottom: 15px;
+        text-align: center;
+      }
+
+      h2 {
+        background-color: #f3f3f3;
+        border-radius: 7px;
+        padding: 15px;
+        text-align: center;
+        font-size: 24px;
+        font-weight: 600;
+        line-height: 1.25;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      p {
+        margin-top: 0;
+        margin-bottom: 24px;
+      }
+      table td {
+        vertical-align: top;
+      }
+
+      /* Email Layout */
+      .email-wrapper {
+        min-width: 600px;
+        margin: 0 auto;
+      }
+      .email-header {
+        background-color: #0070f0;
+        padding: 24px;
+        color: #ffffff;
+        text-align: center;
+      }
+      .email-body {
+        padding: 24px;
+        background: #ffffff;
+      }
+      .email-footer {
+        padding: 24px;
+        background: #ffffff;
+        text-align: center;
+      }
+      .button {
+        display: inline-block;
+        background-color: #0070f0;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 700;
+        text-align: center;
+        text-decoration: none;
+        padding: 12px 24px;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-wrapper">
+      <div class="email-header">Welcome to LearnBay</div>
+    </div>
+    <div class="email-body">
+      <img
+        src="https://cdn.iconscout.com/icon/premium/png-512-thumb/questions-answers-2502163-2094310.png"
+        alt=""
+        style="
+          width: 100%;
+          height: 100px;
+          object-fit: scale-down;
+          border-radius: 7px;
+          margin-bottom: 25px;
+        "
+      />
+      <p>Hello <%= name %>,</p>
+      <p>
+        A new response has been added to your question in the video <%= title %>
+      </p>
+
+      <p>
+        Please login to Learnbay to view the response and continue the
+        discussion
+      </p>
+      <p>Thankyou for being a part of our community</p>
+      <p>
+        Thanks! <br />
+        LearnBay Team
+      </p>
+    </div>
+    <div class="email-footer">
+      <p>
+        If you've any querry, please don't hesitate to contact us at
+        <a href="mailto:info@tazheeb.com">info@tazheeb.com</a>
+      </p>
+    </div>
+  </body>
+</html>
