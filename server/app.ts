@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import { ErrorMiddleware } from "./middleware/error";
 import userRouter from "./routes/user.route";
+import courseRouter from "./routes/course.route";
 
 dotenv.config();
 const Origin = process.env.ORIGIN;
@@ -24,6 +25,7 @@ app.use(
 
 //Routes
 app.use("/api/v1/", userRouter);
+app.use("/api/v1/", courseRouter);
 
 //handling unknown route
 app.all("*", (req: Request, res: Response, next: NextFunction) => {

@@ -16,6 +16,6 @@ cloudinary.config({
 
 //creating server
 app.listen(PORT, () => {
-  console.log(` Server listening on port: ${PORT}`);
+  console.log(`🎉 Server listening on port: ${PORT}`);
   connectDB();
 });
