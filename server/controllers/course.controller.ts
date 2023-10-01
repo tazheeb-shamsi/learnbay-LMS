@@ -2,13 +2,14 @@ import { NextFunction, Request, Response } from "express";
 import cloudinary from "cloudinary";
 import { catchAsyncError } from "../middleware/catchAsyncError";
 import ErrorHandler from "../utils/ErrorHandler";
-import { createCourse } from "../services/course.service";
+import { createCourse, getAllCoursesService } from "../services/course.service";
 import courseModel from "../models/course.model";
 import { redis } from "../utils/redis";
 import mongoose from "mongoose";
 import ejs from "ejs";
 import path from "path";
 import sendEmail from "../utils/sendMail";
+import notificationModel from "../models/notification.model";
 
 export const addCourse = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -72,13 +73,12 @@ export const updateCourse = catchAsyncError(
 export const daleteCourse = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      //TODO: handle deleting course
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
     }
   }
 );
-
-// Without purchasing: get single course
 
 export const getAllCourse = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -109,6 +109,7 @@ export const getAllCourse = catchAsyncError(
   }
 );
 
+// Without purchasing: get single course
 export const getSingleCourse = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -202,6 +203,15 @@ export const addQuestion = catchAsyncError(
 
       //add the new question to the course content
       courseContent.questions.push(newQuestion);
+
+      //TODO:  create a notification
+      //sending notification to Instructor...
+      await notificationModel.create({
+        user: req.user?._id,
+        title: "New Question Recieved",
+        message: `You have a new question in ${courseContent?.title} !`,
+      });
+
       await course?.save();
       res.status(200).json({
         status: "true",
@@ -259,6 +269,12 @@ export const addAnswerToTheQuestion = catchAsyncError(
       //some validations have been performed
       if (req.user?._id === question.user._id) {
         //TODO:  create a notification
+        //sending notification to Instructor...
+        await notificationModel.create({
+          user: req.user?._id,
+          title: "New Question Recieved",
+          message: `You question in course:${courseContent?.title}, have new response !`,
+        });
       } else {
         const data = {
           name: question.user.name,
@@ -343,6 +359,12 @@ export const addReview = catchAsyncError(
       };
 
       //TODO:  create a notification
+      //sending notification to Instructor...
+      await notificationModel.create({
+        user: req.user?._id,
+        title: "New Question Recieved",
+        message: `${req.user?.name} has added a review on ${course?.name}`,
+      });
 
       res.status(200).json({
         status: "true",
@@ -395,6 +417,17 @@ export const addReplyToReview = catchAsyncError(
       });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
+    }
+  }
+);
+
+// get all courses --only for admin
+export const getAllCourses = catchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      getAllCoursesService(res);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
     }
   }
 );

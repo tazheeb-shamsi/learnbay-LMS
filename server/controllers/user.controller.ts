@@ -1,3 +1,4 @@
+import { getAllUsersService } from "./../services/user.service";
 import { accessTokenOptions, refreshTokenOptions } from "./../utils/jwt";
 import { UserInterface } from "./../models/user.model";
 import { NextFunction, Request, Response } from "express";
@@ -77,7 +78,6 @@ interface ActivationTokenInterface {
   token: string;
   activationCode: string;
 }
-
 export const createActivationToken = (
   user: RegistrationInterface
 ): ActivationTokenInterface => {
@@ -100,7 +100,6 @@ interface ActivateUserInterface {
   activation_token: string;
   activation_code: string;
 }
-
 export const activateUser = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -140,7 +139,6 @@ interface UserLoginInterface {
   email: string;
   password: string;
 }
-
 export const loginUser = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -160,6 +158,27 @@ export const loginUser = catchAsyncError(
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
     }
+  }
+);
+
+interface SocialAuthInterface {
+  name: string;
+  email: string;
+  avatar: string;
+}
+export const socialAuth = catchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email, name, avatar } = req.body as SocialAuthInterface;
+      const user = await userModel.findOne({ email });
+
+      if (!user) {
+        const newUser = await userModel.create({ email, name, avatar });
+        sendToken(newUser, 200, res);
+      } else {
+        sendToken(user, 200, res);
+      }
+    } catch (error: any) {}
   }
 );
 
@@ -234,28 +253,6 @@ export const getUserInfo = catchAsyncError(
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
     }
-  }
-);
-
-interface SocialAuthInterface {
-  name: string;
-  email: string;
-  avatar: string;
-}
-
-export const socialAuth = catchAsyncError(
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { email, name, avatar } = req.body as SocialAuthInterface;
-      const user = await userModel.findOne({ email });
-
-      if (!user) {
-        const newUser = await userModel.create({ email, name, avatar });
-        sendToken(newUser, 200, res);
-      } else {
-        sendToken(user, 200, res);
-      }
-    } catch (error: any) {}
   }
 );
 
@@ -376,5 +373,16 @@ export const changeProfilePicture = catchAsyncError(
         user,
       });
     } catch (error: any) {}
+  }
+);
+
+// get all users --only for admin
+export const getAllUsers = catchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      getAllUsersService(res);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 500));
+    }
   }
 );

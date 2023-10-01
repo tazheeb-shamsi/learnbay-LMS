@@ -11,3 +11,12 @@ export const newOrder = catchAsyncError(
     });
   }
 );
+
+// only for admin users
+export const getAllOrderService = async (res: Response) => {
+  const orders = await orderModel.find().sort({ createdAt: -1 });
+  res.status(201).json({
+    success: true,
+    orders,
+  });
+};

@@ -3,6 +3,7 @@ import {
   activateUser,
   changePassword,
   changeProfilePicture,
+  getAllUsers,
   getUserInfo,
   loginUser,
   logoutUser,
@@ -11,22 +12,30 @@ import {
   updateAccessToken,
   updateUserInfo,
 } from "../controllers/user.controller";
-import { isAuthenticated } from "../middleware/auth";
+import { authorizeRoles, isAuthenticated } from "../middleware/auth";
 
-const userRouter = express.Router();
+const userRoute = express.Router();
 
-userRouter.post("/signup", registerUser);
-userRouter.post("/activate-user", activateUser);
+userRoute.post("/signup", registerUser);
+userRoute.post("/activate-user", activateUser);
 
-userRouter.post("/login", loginUser);
-userRouter.get("/logout", isAuthenticated, logoutUser);
-userRouter.get("/refresh", updateAccessToken);
+userRoute.post("/login", loginUser);
+userRoute.get("/logout", isAuthenticated, logoutUser);
+userRoute.get("/refresh", updateAccessToken);
 
-userRouter.post("/social-auth", socialAuth);
+userRoute.post("/social-auth", socialAuth);
 
-userRouter.get("/profile", isAuthenticated, getUserInfo);
-userRouter.put("/update-user-profile", isAuthenticated, updateUserInfo);
-userRouter.put("/change-user-password", isAuthenticated, changePassword);
-userRouter.put("/change-user-avatar", isAuthenticated, changeProfilePicture);
+userRoute.get("/profile", isAuthenticated, getUserInfo);
 
-export default userRouter;
+userRoute.put("/update-user-profile", isAuthenticated, updateUserInfo);
+userRoute.put("/change-user-password", isAuthenticated, changePassword);
+userRoute.put("/change-user-avatar", isAuthenticated, changeProfilePicture);
+
+userRoute.get(
+  "/get-all-users",
+  isAuthenticated,
+  authorizeRoles("admin"),
+  getAllUsers
+);
+
+export default userRoute;
