@@ -11,6 +11,7 @@ import path from "path";
 import sendEmail from "../utils/sendMail";
 import notificationModel from "../models/notification.model";
 
+// Create course   -- only for admin
 export const addCourse = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -33,6 +34,7 @@ export const addCourse = catchAsyncError(
   }
 );
 
+// Update course   -- only for admin
 export const updateCourse = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -70,16 +72,32 @@ export const updateCourse = catchAsyncError(
   }
 );
 
-export const daleteCourse = catchAsyncError(
+// Delete course   -- only for admin
+export const deleteCourse = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      //TODO: handle deleting course
+      const { id } = req.params;
+      const course = await courseModel.findById(id);
+
+      if (!course) {
+        return next(new ErrorHandler("course not found", 404));
+      }
+
+      await course.deleteOne({ id });
+
+      await redis.del(id);
+
+      res.status(200).json({
+        success: true,
+        message: "Course deleted successfully",
+      });
     } catch (error: any) {
-      return next(new ErrorHandler(error.message, 500));
+      return next(new ErrorHandler(error.message, 400));
     }
   }
 );
 
+// Get all course   -- only for admin
 export const getAllCourse = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -142,7 +160,6 @@ export const getSingleCourse = catchAsyncError(
 );
 
 // get course content -- only for valid user
-
 export const getCourseContentByUser = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -171,7 +188,6 @@ export const getCourseContentByUser = catchAsyncError(
 );
 
 //add question to the course
-
 interface addQuestionInterface {
   question: string;
   courseId: string;
