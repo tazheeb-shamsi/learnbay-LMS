@@ -299,7 +299,6 @@ interface reviewInterface {
   rating: number;
   userId: string;
 }
-
 export const addReview = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -361,7 +360,6 @@ interface AddReviewDataInterface {
   courseId: string;
   reviewId: string;
 }
-
 export const addReplyToReview = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {

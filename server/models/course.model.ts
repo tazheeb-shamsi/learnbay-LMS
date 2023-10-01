@@ -111,7 +111,7 @@ const courseSchema = new Schema<CourseInterface>({
     type: Number,
     default: 0,
   },
-  purchased: { type: Number, default: 0 },
+  purchased: { type: Number, required: true, default: 0 },
 });
 
 const courseModel: Model<CourseInterface> = mongoose.model(
