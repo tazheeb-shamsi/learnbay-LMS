@@ -147,7 +147,7 @@ export const getSingleCourse = catchAsyncError(
             "-courseData.videoUrl -courseData.suggestions -courseData.questions -courseData.links"
           );
 
-        await redis.set(courseId, JSON.stringify(course));
+        await redis.set(courseId, JSON.stringify(course), "EX", 259200); //Expires in 3 days
         res.status(200).json({
           success: true,
           course,
@@ -296,7 +296,6 @@ export const addAnswerToTheQuestion = catchAsyncError(
           name: question.user.name,
           title: courseContent.title,
         };
-        console.log(data, "name===title===>>");
         const html = await ejs.renderFile(
           path.join(__dirname, "../mail/question-reply.ejs"),
           data
