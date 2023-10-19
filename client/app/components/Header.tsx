@@ -96,6 +96,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
               />
               <br />
               <br />
+              <hr />
               <p className="text-[16px] px-2 pl-5  dark:text-white text-black">
                 Copyright ©️ 2023 Leanbay
               </p>

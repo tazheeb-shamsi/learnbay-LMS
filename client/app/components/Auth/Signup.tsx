@@ -1,6 +1,6 @@
 import { styles } from "../../../app/styles/style";
 import { useFormik } from "formik";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import * as Yup from "yup";
 import {
   AiFillGithub,
@@ -8,6 +8,8 @@ import {
   AiOutlineEyeInvisible,
 } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
+import { useRegisterMutation } from "@/redux/features/auth/authApi";
+import toast from "react-hot-toast";
 
 type Props = {
   setRoute: (route: string) => void;
@@ -17,14 +19,38 @@ const schema = Yup.object().shape({
   name: Yup.string().required("Please enter your name"),
   email: Yup.string()
     .email("Invalid email")
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      "Invalid email format"
+    )
     .required("Please enter your email"),
   password: Yup.string()
-    .min(8, "Password must be at least 8 characters")
-    .required("Please enter your password"),
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      "Minimun 8 characters, eg. Learnbay@2023"
+    )
+    .required("Please enter your password")
+    .min(8),
 });
 
 const Signup: FC<Props> = ({ setRoute }) => {
   const [show, setShow] = useState(false);
+  const [register, { data, isSuccess, error }] = useRegisterMutation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      const message = data?.message || "Registration Successful";
+      toast.success(message);
+      setRoute("Verification");
+    }
+    if (error) {
+      if ("data" in error) {
+        const errorData = error.data as any;
+        toast.error(errorData.message);
+      }
+    }
+  }, [isSuccess, error]);
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -33,10 +59,11 @@ const Signup: FC<Props> = ({ setRoute }) => {
     },
     validationSchema: schema,
     onSubmit: async ({ name, email, password }) => {
-      console.log(name, email, password);
-      setRoute('Verification')
+      const data = { name, email, password };
+      await register(data);
     },
   });
+
   const { errors, touched, values, handleChange, handleSubmit } = formik;
   return (
     <div className="w-full ">
@@ -90,7 +117,7 @@ const Signup: FC<Props> = ({ setRoute }) => {
             value={values.password}
             onChange={handleChange}
             id="password"
-            placeholder="password!@%"
+            placeholder="Password!@%"
             className={`${
               errors.password && touched.password && "border-red-500"
             } ${styles.input}`}
@@ -109,11 +136,10 @@ const Signup: FC<Props> = ({ setRoute }) => {
               onClick={() => setShow(false)}
             />
           )}
-
-          {errors.password && touched.password && (
-            <span className="text-red-500 pt-2 block">{errors.password}</span>
-          )}
         </div>
+        {errors.password && touched.password && (
+          <span className="text-red-500 pt-2 block">{errors.password}</span>
+        )}
         <div className="w-full mt-5">
           <input type="submit" value="Signup" className={`${styles.button}`} />
         </div>

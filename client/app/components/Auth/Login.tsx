@@ -68,7 +68,7 @@ const Login: FC<Props> = ({ setRoute }) => {
             value={values.password}
             onChange={handleChange}
             id="password"
-            placeholder="password!@%"
+            placeholder="Password!@%"
             className={`${
               errors.password && touched.password && "border-red-500"
             } ${styles.input}`}
@@ -87,11 +87,11 @@ const Login: FC<Props> = ({ setRoute }) => {
               onClick={() => setShow(false)}
             />
           )}
-
-          {errors.password && touched.password && (
-            <span className="text-red-500 pt-2 block">{errors.password}</span>
-          )}
         </div>
+        {errors.password && touched.password && (
+          <span className="text-red-500 pt-2 block">{errors.password}</span>
+        )}
+        
         <div className="w-full mt-5">
           <input type="submit" value="Login" className={`${styles.button}`} />
         </div>
