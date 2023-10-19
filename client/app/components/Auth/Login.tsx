@@ -1,6 +1,6 @@
 import { styles } from "../../../app/styles/style";
 import { useFormik } from "formik";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import * as Yup from "yup";
 import {
   AiFillGithub,
@@ -8,9 +8,12 @@ import {
   AiOutlineEyeInvisible,
 } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
+import { useLoginMutation } from "@/redux/features/auth/authApi";
+import toast from "react-hot-toast";
 
 type Props = {
   setRoute: (route: string) => void;
+  setOpen: (open: boolean) => void;
 };
 
 const schema = Yup.object().shape({
@@ -22,7 +25,8 @@ const schema = Yup.object().shape({
     .required("Please enter your password"),
 });
 
-const Login: FC<Props> = ({ setRoute }) => {
+const Login: FC<Props> = ({ setRoute, setOpen }) => {
+  const [login, { isSuccess, isLoading, data, error }] = useLoginMutation();
   const [show, setShow] = useState(false);
   const formik = useFormik({
     initialValues: {
@@ -31,10 +35,24 @@ const Login: FC<Props> = ({ setRoute }) => {
     },
     validationSchema: schema,
     onSubmit: async ({ email, password }) => {
-      console.log(email, password);
-      setRoute("Signup");
+      await login({ email, password });
     },
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      const message = data?.message || "Logged-In Successfully";
+      toast.success(message);
+      setOpen(false);
+    }
+    if (error) {
+      if ("data" in error) {
+        const errorData = error.data as any;
+        toast.error(errorData.message);
+      }
+    }
+  }, [isSuccess, error]);
+
   const { errors, touched, values, handleChange, handleSubmit } = formik;
   return (
     <div className="w-full ">
@@ -91,7 +109,7 @@ const Login: FC<Props> = ({ setRoute }) => {
         {errors.password && touched.password && (
           <span className="text-red-500 pt-2 block">{errors.password}</span>
         )}
-        
+
         <div className="w-full mt-5">
           <input type="submit" value="Login" className={`${styles.button}`} />
         </div>
