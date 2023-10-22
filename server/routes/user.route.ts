@@ -29,7 +29,7 @@ userRoute.post("/social-auth", socialAuth);
 
 userRoute.get("/profile", isAuthenticated, getUserInfo);
 
-userRoute.put("/update-user-profile", isAuthenticated, updateUserInfo);
+userRoute.put("/update-user-info", isAuthenticated, updateUserInfo);
 userRoute.put("/change-user-password", isAuthenticated, changePassword);
 userRoute.put("/change-user-avatar", isAuthenticated, changeProfilePicture);
 

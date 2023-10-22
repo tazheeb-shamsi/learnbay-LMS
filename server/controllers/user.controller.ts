@@ -268,17 +268,18 @@ interface UpdateUserInterface {
 export const updateUserInfo = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { email, name } = req.body as UpdateUserInterface;
+      // const { email, name } = req.body as UpdateUserInterface;
+      const { name } = req.body as UpdateUserInterface;
       const userId = req.user?._id;
 
       const user = await userModel.findById(userId);
-      if (email && user) {
-        const isEmailExist = await userModel.findOne({ email });
-        if (isEmailExist) {
-          return next(new ErrorHandler("Email already exists", 400));
-        }
-        user.email = email;
-      }
+      // if (email && user) {
+      //   const isEmailExist = await userModel.findOne({ email });
+      //   if (isEmailExist) {
+      //     return next(new ErrorHandler("Email already exists", 400));
+      //   }
+      //   user.email = email;
+      // }
       if (name && user) {
         user.name = name;
       }
