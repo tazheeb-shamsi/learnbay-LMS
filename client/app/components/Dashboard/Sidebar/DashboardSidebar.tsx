@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import "react-pro-sidebar/dist/css/styles.css";
-import defaultAvatar from "../../../public/assets/avatar.png";
+import defaultAvatar from "@/public/assets/avatar.png";
 import { Menu, MenuItem, ProSidebar } from "react-pro-sidebar";
 import Link from "next/link";
 import { Box, IconButton, Typography } from "@mui/material";

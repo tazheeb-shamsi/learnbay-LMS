@@ -2,8 +2,8 @@
 import React, { FC } from "react";
 import Heading from "../utils/Heading";
 import AdminProtected from "../hooks/adminProtected";
-import DashboardSidebar from "./Sidebar/DashboardSidebar";
-import DashboardHero from "./DashboardHero";
+import DashboardSidebar from "../components/Dashboard/Sidebar/DashboardSidebar";
+import DashboardHero from "../components/Dashboard/DashboardHero";
 
 type Props = {};
 
