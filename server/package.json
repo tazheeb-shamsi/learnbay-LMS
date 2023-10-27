@@ -16,6 +16,7 @@
     "@types/jsonwebtoken": "^9.0.3",
     "@types/node": "^20.6.1",
     "@types/node-cron": "^3.0.9",
+    "axios": "^1.5.1",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.40.0",
     "cookie-parser": "^1.4.6",
