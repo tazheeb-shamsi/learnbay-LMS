@@ -154,11 +154,11 @@ const CourseInformation: FC<Props> = ({
             </label>
             <input
               type="text"
-              id="course-level"
+              id="courseLevel"
               required
-              value={courseInfo.level}
+              value={courseInfo.courseLevel}
               onChange={(e: any) =>
-                setCourseInfo({ ...courseInfo, level: e.target.value })
+                setCourseInfo({ ...courseInfo, courseLevel: e.target.value })
               }
               placeholder="Beginner/Intermediate/Expert"
               className={`${styles.input}`}
