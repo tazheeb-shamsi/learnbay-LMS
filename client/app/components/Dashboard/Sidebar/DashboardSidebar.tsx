@@ -208,7 +208,7 @@ const DashboardSidebar = () => {
             />
             <Item
               title="Live Course"
-              to="/dashboard/course"
+              to="/dashboard/courses"
               icon={<OndemandVideo />}
               selected={selected}
               setSelected={setSelected}

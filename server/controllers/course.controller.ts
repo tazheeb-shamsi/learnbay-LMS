@@ -36,14 +36,73 @@ export const addCourse = catchAsyncError(
 );
 
 // Update course   -- only for admin
+// export const updateCourse = catchAsyncError(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//       const data = req.body;
+
+//       const thumbnail = data.thumbnail;
+
+//       const courseId = req.params.id;
+
+//       const courseData = (await courseModel.findById(courseId)) as any;
+
+//       if (
+//         thumbnail &&
+//         typeof thumbnail === "string" &&
+//         !thumbnail.startsWith("https")
+//       ) {
+//         await cloudinary.v2.uploader.destroy(courseData.thumbnail.public_id);
+//         const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
+//           folder: "courses",
+//         });
+
+//         data.thumbnail = {
+//           public_id: myCloud.public_id,
+//           url: myCloud.secure_url,
+//         };
+//       }
+
+//       if (typeof thumbnail === "string" && thumbnail.startsWith("https")) {
+//         data.thumbnail = {
+//           public_id: courseData?.thumbnail.public_id,
+//           url: courseData?.thumbnail.url,
+//         };
+//       }
+
+//       const course = await courseModel.findById(
+//         courseId,
+//         {
+//           $set: data,
+//         },
+//         { new: true }
+//       );
+
+//       res.status(200).json({
+//         status: "success",
+//         course,
+//       });
+//     } catch (error: any) {
+//       return next(new ErrorHandler(error.message, 500));
+//     }
+//   }
+// );
+
 export const updateCourse = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const data = req.body;
-
       const thumbnail = data.thumbnail;
-      if (thumbnail) {
-        await cloudinary.v2.uploader.destroy(thumbnail.public_id);
+      const courseId = req.params.id;
+
+      const courseData = await courseModel.findById(courseId)as any;
+
+      if (
+        thumbnail &&
+        typeof thumbnail === "string" &&
+        !thumbnail.startsWith("https")
+      ) {
+        await cloudinary.v2.uploader.destroy(courseData.thumbnail.public_id);
         const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
           folder: "courses",
         });
@@ -53,19 +112,21 @@ export const updateCourse = catchAsyncError(
           url: myCloud.secure_url,
         };
       }
-      const courseId = req.params.id;
 
-      const course = await courseModel.findById(
-        courseId,
-        {
-          $set: data,
-        },
-        { new: true }
-      );
+      if (typeof thumbnail === "string" && thumbnail.startsWith("https")) {
+        data.thumbnail = {
+          public_id: courseData?.thumbnail.public_id,
+          url: courseData?.thumbnail.url,
+        };
+      }
+
+      // Update the document directly without using $set
+      Object.assign(courseData, data);
+      await courseData.save();
 
       res.status(200).json({
         status: "success",
-        course,
+        course: courseData,
       });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
@@ -221,7 +282,6 @@ export const addQuestion = catchAsyncError(
       //add the new question to the course content
       courseContent.questions.push(newQuestion);
 
-      //TODO:  create a notification
       //sending notification to Instructor...
       await notificationModel.create({
         user: req.user?._id,
@@ -285,7 +345,6 @@ export const addAnswerToTheQuestion = catchAsyncError(
 
       //some validations have been performed
       if (req.user?._id === question.user._id) {
-        //TODO:  create a notification
         //sending notification to Instructor...
         await notificationModel.create({
           user: req.user?._id,
@@ -374,7 +433,6 @@ export const addReview = catchAsyncError(
         message: `${req.user?.name} has added a review on ${course?.name}`,
       };
 
-      //TODO:  create a notification
       //sending notification to Instructor...
       await notificationModel.create({
         user: req.user?._id,
@@ -438,7 +496,7 @@ export const addReplyToReview = catchAsyncError(
 );
 
 // get all courses --only for admin
-export const getAllCourses = catchAsyncError(
+export const getAllCoursesByAdmin = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       getAllCoursesService(res);

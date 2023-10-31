@@ -1,13 +1,14 @@
 "use client";
-import React, { FC } from "react";
-import Heading from "../utils/Heading";
-import AdminProtected from "../hooks/adminProtected";
-import DashboardSidebar from "../components/Dashboard/Sidebar/DashboardSidebar";
-import DashboardHeader from "../components/Dashboard/DashboardHeader";
+import AllUsers from "@/app/components/Dashboard/User/AllUsers";
+import DashboardSidebar from "@/app/components/Dashboard/Sidebar/DashboardSidebar";
+import AdminProtected from "@/app/hooks/adminProtected";
+import Heading from "@/app/utils/Heading";
+import React from "react";
+import DashboardHeader from "@/app/components/Dashboard/DashboardHeader";
 
 type Props = {};
 
-const page: FC<Props> = (props) => {
+const page = (props: Props) => {
   return (
     <div>
       <AdminProtected>
@@ -16,12 +17,13 @@ const page: FC<Props> = (props) => {
           description="Leanbay is a platform specially for the Freshers and also for the Experienced Canditates to enhance there technical skill-sets."
           keywords="Programming, MERN, Full Stack Developer, Software Engineer, Web Development, MongoDb, Expres.js, React.js, Node.js, Javascript"
         />
-        <div className="flex h-[200vh]">
+        <div className="flex h-screen">
           <div className="1500px:w-[16%] w-1/5">
             <DashboardSidebar />
           </div>
           <div className="w-[85%] ">
             <DashboardHeader />
+            <AllUsers  isTeam={false} />
           </div>
         </div>
       </AdminProtected>

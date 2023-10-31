@@ -12,7 +12,7 @@ const Courseplayer: FC<Props> = ({ videoUrl }) => {
     playbackInfo: "",
   });
   const url = process.env.NEXT_PUBLIC_SERVER_URI;
-  console.log("====>", url);
+ 
   useEffect(() => {
     axios
       .post(`${process.env.NEXT_PUBLIC_SERVER_URI}getVdoCipherOTP`, {

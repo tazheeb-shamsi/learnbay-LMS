@@ -27,7 +27,7 @@ const CourseInformation: FC<Props> = ({
       const reader = new FileReader();
       reader.onload = (e: any) => {
         if (reader.readyState === 2) {
-          setCourseInfo({ ...courseInfo, thumnail: reader.result });
+          setCourseInfo({ ...courseInfo, thumbnail: reader.result });
         }
       };
       reader.readAsDataURL(file);
@@ -51,7 +51,7 @@ const CourseInformation: FC<Props> = ({
     if (file) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        setCourseInfo({ ...courseInfo, thumnail: reader.result });
+        setCourseInfo({ ...courseInfo, thumbnail: reader.result });
       };
       reader.readAsDataURL(file);
     }
@@ -200,9 +200,13 @@ const CourseInformation: FC<Props> = ({
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
-            {courseInfo.thumnail ? (
+            {courseInfo.thumbnail ? (
               <img
-                src={courseInfo.thumnail}
+                src={
+                  courseInfo.thumbnail.url
+                    ? courseInfo.thumbnail.url
+                    : courseInfo.thumbnail
+                }
                 alt="course-thumbnail"
                 className="max-h-full w-full object-cover"
               />

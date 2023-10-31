@@ -22,8 +22,9 @@ const CourseContent: FC<Props> = ({
   handleSubmit: handleCourseSubmit,
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(
-    Array(courseContent.length).fill(false)
-  );
+    Array(courseContent?.length).fill(false)
+    );
+
   const [activeSection, setActiveSection] = useState(1);
 
   const handleSubmit = (e: any) => {

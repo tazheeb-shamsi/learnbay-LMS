@@ -9,12 +9,14 @@ type Props = {
   setActive: (active: number) => void;
   courseData: any;
   handleCreateCourse: any;
+  isEdit: boolean;
 };
 
 const CoursePreview: FC<Props> = ({
   active,
   setActive,
   courseData,
+  isEdit,
   handleCreateCourse,
 }) => {
   const discountPercentage =
@@ -40,8 +42,22 @@ const CoursePreview: FC<Props> = ({
             title={courseData?.title}
           />
         </div>
+        <br />
+        <div className="w-[90%]">
+          <h1 className="font-Poppins font-[600] text-[25px]  dark:text-white text-black">
+            {courseData?.name}
+          </h1>
+          <div className="flex items-center justify-between pt-3  dark:text-white text-black">
+            <div className="flex items-center">
+              <Ratings rating={0} />
+              <h5>0 Reviews</h5>
+            </div>
+            <h5>0 Students</h5>
+          </div>
+        </div>
 
-        <div className="flex items-center">
+        <br />
+        <div className="flex items-center  dark:text-white text-black ">
           <h1 className="pt-5 text-[25px]">
             {courseData?.price === 0 ? "flex" : "₹" + courseData?.price}
           </h1>
@@ -55,7 +71,7 @@ const CoursePreview: FC<Props> = ({
 
         <div className="flex items-center">
           <div
-            className={`${styles.button} !w-[180px] my-3 font-Poppins !bg-[crimson] cursor-not-allowed`}
+            className={`${styles.button} !w-[200px] my-3 font-Poppins !bg-[crimson] cursor-not-allowed`}
           >
             Buy Now ₹ {courseData?.price}
           </div>
@@ -89,20 +105,10 @@ const CoursePreview: FC<Props> = ({
           💁 Premium Support
         </p>
       </div>
+      <br />
 
       <div className="w-full ">
         <div className="w-full 800px:pr-5">
-          <h1 className="font-Poppins font-[600] text-[25px]">
-            {courseData?.name}
-          </h1>
-          <div className="flex items-center justify-between pt-3  dark:text-white text-black">
-            <div className="flex items-center">
-              <Ratings rating={0} />
-              <h5>0 Reviews</h5>
-            </div>
-            <h5>0 Students</h5>
-          </div>
-          <br />
           <h1 className="font-Poppins font-[600] text-[25px]  dark:text-white text-black">
             What you will learn from this course?
           </h1>
@@ -119,7 +125,6 @@ const CoursePreview: FC<Props> = ({
               </div>
             </>
           ))}
-        <br />
         <br />
 
         <h1 className="font-Poppins font-[600] text-[25px]  dark:text-white text-black">
@@ -143,7 +148,7 @@ const CoursePreview: FC<Props> = ({
             Course Details
           </h1>
           <p className="text-[18px] mt-[20px] whitespace-pre-line w-full overflow-hidden  dark:text-white text-black">
-            {courseData?.description || "Course Details===>"}
+            {courseData?.description}
           </p>
         </div>
         <br />
@@ -160,7 +165,7 @@ const CoursePreview: FC<Props> = ({
           className="w-full 800px:w-[180px] flex items-center justify-center h-[40px] bg-[#37a39a] text-center text-[#ffff] rounded mt-8 cursor-pointer"
           onClick={() => createCourse()}
         >
-          Create
+          {isEdit ? "Update" : "Create"}
         </div>
       </div>
     </div>
