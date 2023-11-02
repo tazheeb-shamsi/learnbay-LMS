@@ -229,7 +229,7 @@ const DashboardSidebar = () => {
             />
             <Item
               title="FAQ"
-              to="/faq"
+              to="/dashboard/faq"
               icon={<Quiz />}
               selected={selected}
               setSelected={setSelected}

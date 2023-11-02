@@ -43,7 +43,7 @@ const NavItems: FC<Props> = ({ activeItem, isMobile }) => {
               return (
                 <Link
                   key={index}
-                  href={item.url}
+                  href={`${item.url}`}
                   passHref
                   className={`${
                     activeItem === index
@@ -61,24 +61,26 @@ const NavItems: FC<Props> = ({ activeItem, isMobile }) => {
 
       {isMobile && (
         <div className=" 800px:hidden mt-5">
-          {navItemData &&
-            navItemData.map((item, index) => {
-              return (
-                <Link
-                  key={index}
-                  href={item.url}
-                  passHref
-                  className={`${
-                    activeItem === index
-                      ? "dark:text-[#37a39a] text-[crimson] font-bold"
-                      : "dark:text-white text-black"
-                  }
+          <div className="w-full text-center py-6">
+            {navItemData &&
+              navItemData.map((item, index) => {
+                return (
+                  <Link
+                    key={index}
+                    href={item.url}
+                    passHref
+                    className={`${
+                      activeItem === index
+                        ? "dark:text-[#37a39a] text-[crimson] font-bold"
+                        : "dark:text-white text-black"
+                    }
                     block text-[18px] px-6 py-5 font-Poppins font-[400]`}
-                >
-                  {item.title}
-                </Link>
-              );
-            })}
+                  >
+                    {item.title}
+                  </Link>
+                );
+              })}
+          </div>
         </div>
       )}
     </>

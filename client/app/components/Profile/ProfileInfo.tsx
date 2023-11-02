@@ -52,7 +52,7 @@ const ProfileInfo: FC<Props> = ({ user, avatar }) => {
     e.preventDefault();
     if (name !== "") {
       await editProfile({
-        name: user.name,
+        name: name,
         // email: user.email,
       });
     }
@@ -114,7 +114,7 @@ const ProfileInfo: FC<Props> = ({ user, avatar }) => {
                 required
                 value={user?.email}
                 onChange={(e) => setName(e.target.value)}
-                className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
+                className={`${styles.input} !w-[95%] mb-4 800px:mb-0 cursor-not-allowed`}
               />
               <input
                 type="submit"

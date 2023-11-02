@@ -8,18 +8,28 @@ export const createLayout = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { type } = req.body;
+
+      const isTypeExist = await layoutModel.findOne({ type });
+
+      if (isTypeExist) {
+        return next(new ErrorHandler(`${type} already exists`, 400));
+      }
+
       if (type === "Banner") {
         const { image, title, subTitle } = req.body;
         const myCloud = await cloudinary.v2.uploader.upload(image, {
           folder: "layout",
         });
         const banner = {
-          image: {
-            public_id: myCloud.public_id,
-            url: myCloud.secure_url,
+          type: "Banner",
+          banner: {
+            image: {
+              public_id: myCloud.public_id,
+              url: myCloud.secure_url,
+            },
+            title,
+            subTitle,
           },
-          title,
-          subTitle,
         };
         await layoutModel.create(banner);
       }
@@ -69,14 +79,22 @@ export const editLayout = catchAsyncError(
       if (type === "Banner") {
         const bannerData: any = await layoutModel.findOne({ type: "Banner" });
         const { image, title, subTitle } = req.body;
-        await await cloudinary.v2.uploader.destroy(bannerData.image.public_id);
-        const myCloud = await cloudinary.v2.uploader.upload(image, {
-          folder: "layout",
-        });
+
+        const data = image.startsWith("http")
+          ? bannerData
+          : await cloudinary.v2.uploader.upload(image, {
+              folder: "layout",
+            });
+
         const banner = {
+          type: "Banner",
           image: {
-            public_id: myCloud.public_id,
-            url: myCloud.secure_url,
+            public_id: image.startsWith("https")
+              ? bannerData.banner.image.public_id
+              : data?.public_id,
+            url: image.startsWith("https")
+              ? bannerData.banner.image[0].url
+              : data?.secure_url,
           },
           title,
           subTitle,
@@ -129,7 +147,7 @@ export const editLayout = catchAsyncError(
 export const getLayoutByType = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { type } = req.body;
+      const { type } = req.params;
       const layout = await layoutModel.findOne({ type });
 
       res.status(200).json({

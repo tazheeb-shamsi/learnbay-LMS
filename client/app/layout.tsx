@@ -9,7 +9,7 @@ import { Providers } from "./Provider";
 import { SessionProvider } from "next-auth/react";
 import { FC, ReactNode } from "react";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
-import Loader from "./components/Loader/Loader.tsx";
+import Loader from "./components/Loader/Loader";
 
 const poppins = Poppins({
   subsets: ["latin"],
