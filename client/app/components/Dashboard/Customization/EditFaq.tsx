@@ -31,7 +31,7 @@ const EditFaq = (props: Props) => {
       setQuestions(data.layout.faq);
     }
     if (isSuccess) {
-      refetch()
+      refetch();
       toast.success("FAQ updated successfully");
     }
     if (error) {
@@ -40,9 +40,7 @@ const EditFaq = (props: Props) => {
         toast.error(errorMessage.message);
       }
     }
-  }, [data, isSuccess, error]);
-
-  console.log("questions ==>", questions);
+  }, [data, isSuccess, error, refetch]);
 
   const toggleQuestion = (id: any) => {
     setQuestions((prevQuestion) =>
@@ -154,7 +152,7 @@ const EditFaq = (props: Props) => {
                           <AiOutlineDelete
                             onClick={() =>
                               setQuestions((prevQuestion) =>
-                                prevQuestion.filter((item) => item._id !== q.id)
+                                prevQuestion.filter((item) => item._id !== q._id)
                               )
                             }
                             className="cursor-pointer ml-2 text-[18px] !text-red-500"
