@@ -6,7 +6,6 @@ import {
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
-import { HiMinus, HiPlus } from "react-icons/hi";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import {
   MdOutlineKeyboardArrowDown,
