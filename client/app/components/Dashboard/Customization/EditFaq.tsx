@@ -22,7 +22,6 @@ const EditFaq = (props: Props) => {
 
   const [editLayout, { isSuccess, error }] = useEditLayoutMutation();
 
-  console.log(data);
   const [questions, setQuestions] = useState<any[]>([]);
 
   useEffect(() => {

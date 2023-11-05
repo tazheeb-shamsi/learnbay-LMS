@@ -23,7 +23,7 @@ const CourseContent: FC<Props> = ({
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(
     Array(courseContent?.length).fill(false)
-    );
+  );
 
   const [activeSection, setActiveSection] = useState(1);
 
@@ -231,6 +231,23 @@ const CourseContent: FC<Props> = ({
                         onChange={(e) => {
                           const updatedData = [...courseContent];
                           updatedData[index].videoUrl = e.target.value;
+                          setCourseContent(updatedData);
+                        }}
+                      />
+                    </div>
+
+                    <div className="my-3">
+                      <label className={styles.label}>
+                        Video Length (In minutes)
+                      </label>
+                      <input
+                        type="number"
+                        placeholder="Add video Length"
+                        className={` ${styles.input} font-Poppins cursor-pointer  dark:text-white text-black`}
+                        value={item.videoLength}
+                        onChange={(e) => {
+                          const updatedData = [...courseContent];
+                          updatedData[index].videoLength = e.target.value;
                           setCourseContent(updatedData);
                         }}
                       />

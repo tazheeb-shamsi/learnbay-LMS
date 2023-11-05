@@ -163,6 +163,7 @@ const DashboardSidebar = () => {
               </Box>
             </Box>
           )}
+
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
             <Item
               title="Dashboard"
@@ -283,7 +284,7 @@ const DashboardSidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Typography
+            {/* <Typography
               variant="h5"
               sx={{ m: "15px 0 5px 25px" }}
               className="!text-[18px] text-black dark:text-[#ffffffc1] capitalize !font-[400]"
@@ -296,7 +297,7 @@ const DashboardSidebar = () => {
               icon={<Settings />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
             <Item
               title="Logout"
               to="/"

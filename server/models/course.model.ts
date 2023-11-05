@@ -22,7 +22,7 @@ interface CourseDataInterface extends Document {
   videoUrl: string;
   videoThumbnail: object;
   videoSection: string;
-  videoDuration: number;
+  videoLength: number;
   videoPlayer: string;
   links: LinkInterface[];
   questions: CommentInterface[];
@@ -32,6 +32,7 @@ interface CourseDataInterface extends Document {
 interface CourseInterface extends Document {
   name: string;
   description: string;
+  categories: string;
   price: number;
   estimatedPrice?: number;
   thumbnail: object;
@@ -71,7 +72,7 @@ const courseDataSchema = new Schema<CourseDataInterface>({
   title: String,
   description: String,
   videoUrl: String,
-  videoDuration: Number,
+  videoLength: Number,
   videoSection: String,
   videoPlayer: String,
   links: [linkSchema],
@@ -83,6 +84,7 @@ const courseSchema = new Schema<CourseInterface>(
   {
     name: { type: String, required: true },
     description: { type: String, required: true },
+    categories: { type: String, required: true },
     price: { type: Number, required: true },
     estimatedPrice: { type: Number, required: false },
     thumbnail: {
