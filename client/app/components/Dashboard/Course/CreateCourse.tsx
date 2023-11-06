@@ -40,12 +40,12 @@ const CreateCourse = (props: Props) => {
     price: "",
     estimatedPrice: "",
     tags: "",
-    categories: "",
     courseLevel: "",
+    categories: "",
     demoUrl: "",
     thumbnail: "",
   });
-  
+  console.log("courseInfo--->", courseInfo);
   const [courseContent, setCourseContent] = useState([
     {
       videoUrl: "",
@@ -62,7 +62,7 @@ const CreateCourse = (props: Props) => {
       suggestion: "",
     },
   ]);
-  console.log("courseContent", courseContent);
+  console.log("courseContent--->", courseContent);
 
   const handleSubmit = () => {
     // Formatting benifits
@@ -96,6 +96,7 @@ const CreateCourse = (props: Props) => {
       price: courseInfo.price,
       estimatedPrice: courseInfo.estimatedPrice,
       tags: courseInfo.tags,
+      categories: courseInfo.categories,
       courseLevel: courseInfo.courseLevel,
       demoUrl: courseInfo.demoUrl,
       thumbnail: courseInfo.thumbnail,
@@ -107,13 +108,13 @@ const CreateCourse = (props: Props) => {
 
     setCourseData(newCourseData);
   };
-
   const handleCreateCourse = async (e: any) => {
     const data = courseData;
     if (!isLoading) {
       await createCourse(data);
     }
   };
+  console.log("finalCourseData--->", courseData);
 
   return (
     <div className="w-full flex min-h-screen">

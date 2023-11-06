@@ -156,7 +156,7 @@ const DashboardSidebar = () => {
                 <Typography
                   variant="h6"
                   className="!text-[20px] text-black dark:text-[#ffffffc1] capitalize"
-                  sx={{ m: "10px 0 0 0 " }}
+                  sx={{ m: "10px 0 0 0" }}
                 >
                   - {user.role}
                 </Typography>

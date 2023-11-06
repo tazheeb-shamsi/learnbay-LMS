@@ -160,15 +160,18 @@ const CourseInformation: FC<Props> = ({
           </div>
           <div className="w-[45%]">
             <label htmlFor="" className={`${styles.label}`}>
-              Course Categories
+              Course Category
             </label>
             <select
               name=""
               id=""
               className={`${styles.input} bg-[#ffffffeb] dark:bg-[#090909]`}
-              value={courseInfo.category}
+              value={courseInfo.categories}
               onChange={(e: any) =>
-                setCourseInfo({ ...courseInfo, category: e.target.value })
+                setCourseInfo({
+                  ...courseInfo,
+                  categories: e.target.value,
+                })
               }
             >
               <option value="">Select Category</option>
