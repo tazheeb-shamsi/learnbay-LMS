@@ -31,7 +31,7 @@ const CourseAnalytics = (props: Props) => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="h-screen">
+        <div className="h-screen overflow-hidden">
           <div className="mt-[50px] ">
             <h1 className={`${styles.title} px-5 !text-start`}>
               Course Analytics

@@ -82,57 +82,6 @@ const AllInvoices: FC<Props> = ({ isDashboard }) => {
         ]),
   ];
 
-  // const rows: any = [
-  //   {
-  //     id: "12345",
-  //     userName: "Tazheeb Shamsi",
-  //     userEmail: "info@gmail.corn",
-  //     title: "React JS Course",
-  //     price: "$500",
-  //     created_at: "2 days ago",
-  //   },
-  //   {
-  //     id: "123456",
-  //     userName: "Tazheeb Shamsi",
-  //     userEmail: "info@gmail.corn",
-  //     title: "React JS Course",
-  //     price: "$500",
-  //     created_at: "2 days ago",
-  //   },
-  //   {
-  //     id: "123457",
-  //     userName: "Tazheeb Shamsi",
-  //     userEmail: "info@gmail.corn",
-  //     title: "React JS Course",
-  //     price: "$500",
-  //     created_at: "2 days ago",
-  //   },
-  //   {
-  //     id: "1234578",
-  //     userName: "Tazheeb Shamsi",
-  //     userEmail: "info@gmail.corn",
-  //     title: "React JS Course",
-  //     price: "$500",
-  //     created_at: "2 days ago",
-  //   },
-  //   {
-  //     id: "1234579",
-  //     userName: "Tazheeb Shamsi",
-  //     userEmail: "info@gmail.corn",
-  //     title: "React JS Course",
-  //     price: "$500",
-  //     created_at: "2 days ago",
-  //   },
-  //   {
-  //     id: "1234580",
-  //     userName: "Tazheeb Shamsi",
-  //     userEmail: "info@gmail.corn",
-  //     title: "React JS Course",
-  //     price: "$500",
-  //     created_at: "2 days ago",
-  //   },
-  // ];
-
   const rows: any = [];
 
   orderData &&

@@ -15,7 +15,7 @@ import Link from "next/link";
 
 type Props = {};
 
-const AllCOurses = (props: Props) => {
+const AllCourses = (props: Props) => {
   const { theme, setTheme } = useTheme();
   const [open, setOpen] = useState(false);
   const [courseld, setCourseId] = useState("");
@@ -207,4 +207,4 @@ const AllCOurses = (props: Props) => {
   );
 };
 
-export default AllCOurses;
+export default AllCourses;

@@ -31,7 +31,11 @@ const OrdersAnalytics: FC<Props> = ({ isDashboard }) => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className={` ${isDashboard ? "h-[30vh]" : "h-screen"}  `}>
+        <div
+          className={` ${
+            isDashboard ? "h-[30vh]" : "h-screen"
+          }  overflow-hidden`}
+        >
           <div
             className={` ${
               isDashboard ? "mt-0 pl-[40px] mb-2" : "mt-[50px]"
