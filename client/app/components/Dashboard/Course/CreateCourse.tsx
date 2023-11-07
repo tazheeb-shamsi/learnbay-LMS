@@ -45,7 +45,6 @@ const CreateCourse = (props: Props) => {
     demoUrl: "",
     thumbnail: "",
   });
-  console.log("courseInfo--->", courseInfo);
   const [courseContent, setCourseContent] = useState([
     {
       videoUrl: "",
@@ -62,7 +61,6 @@ const CreateCourse = (props: Props) => {
       suggestion: "",
     },
   ]);
-  console.log("courseContent--->", courseContent);
 
   const handleSubmit = () => {
     // Formatting benifits
@@ -114,7 +112,6 @@ const CreateCourse = (props: Props) => {
       await createCourse(data);
     }
   };
-  console.log("finalCourseData--->", courseData);
 
   return (
     <div className="w-full flex min-h-screen">

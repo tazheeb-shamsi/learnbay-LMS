@@ -69,7 +69,7 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
     deleteError,
   ]);
 
-  const formatDate = (dateString: string): string => {
+   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
     const options: Intl.DateTimeFormatOptions = {
       year: "numeric",

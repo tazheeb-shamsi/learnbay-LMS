@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React, { FC } from "react";
-import defaultAvatar from "../../../public/assets/avatar.png";
+import defaultAvatar from "../../public/assets/avatar.png";
 import { RiDashboardLine, RiLockPasswordLine } from "react-icons/ri";
 import { SiCoursera } from "react-icons/si";
 import { AiOutlineLogout } from "react-icons/ai";

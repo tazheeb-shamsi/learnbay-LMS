@@ -265,21 +265,21 @@ const DashboardSidebar = () => {
             </Typography>
             <Item
               title="Course Anaytics"
-              to="/dashboard/team"
+              to="/dashboard/course-analytics"
               icon={<BarChart />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
               title="Order Anaytics"
-              to="/dashboard/orders"
+              to="/dashboard/orders-analytics"
               icon={<ShoppingBag />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
               title="Users Anaytics"
-              to="/dashboard/users"
+              to="/dashboard/users-analytics"
               icon={<Group />}
               selected={selected}
               setSelected={setSelected}

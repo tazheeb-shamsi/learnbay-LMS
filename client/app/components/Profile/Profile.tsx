@@ -1,7 +1,7 @@
 "use client";
 
 import React, { FC, useState } from "react";
-import SideBar from "../components/SideBar";
+import SideBar from "../SideBar";
 import { useLogOutQuery } from "../../../redux/features/auth/authApi";
 import { signOut } from "next-auth/react";
 import { redirect } from "next/navigation";

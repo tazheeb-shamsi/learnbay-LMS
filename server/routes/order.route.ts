@@ -7,7 +7,7 @@ const orderRoute = express.Router();
 
 orderRoute.post(
   "/create-order",
-  // updateAccessToken,
+  updateAccessToken,
   isAuthenticated,
   createOrder
 );
