@@ -47,10 +47,50 @@ body {
   background-image: linear-gradient(
     147.92deg,
     hsla(239, 76%, 53%, 0.456) 10.41%,
-    hsLa(0, 0%, 100%, 0) 89.25%
+    hsla(0, 0%, 100%, 0) 89.25%
   );
   animation: changeBackgroundColor 8s infinite alternate;
 }
+
+.text_animation {
+  background: linear-gradient(
+    147.92deg,
+    hsla(239, 76%, 53%, 0.456) 10.41%,
+    hsla(0, 0%, 100%, 0) 89.25%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  /* color: transparent; */
+  animation: changeOpacity 10s infinite alternate;
+}
+
+@keyframes changeOpacity {
+   0%, 100% {
+    color: transparent;
+    opacity: 1;
+  }
+  16.67% {
+    color: #ff0000; /* Change to your desired color */
+    opacity: 0.9;
+  }
+  33.33% {
+    color: #00ff00; /* Change to your desired color */
+    opacity: 0.8;
+  }
+  50% {
+    color: #0000ff; /* Change to your desired color */
+    opacity: 0.6;
+  }
+  66.67% {
+    color: #ffff00; /* Change to your desired color */
+    opacity: 0.5;
+  }
+  83.33% {
+    color: #ff00ff; /* Change to your desired color */
+    opacity: 0.4;
+  }
+}
+
 
 @keyframes changeBackgroundColor {
   0%,

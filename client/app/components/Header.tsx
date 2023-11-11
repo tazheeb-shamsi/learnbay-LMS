@@ -92,7 +92,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
               <div>
                 <Link
                   href={"/"}
-                  className={`text-[25px] font-Poppins font-[500] text-black dark:text-white`}
+                  className={`text-[25px] font-Poppins font-[500] text-black dark:text-white `}
                 >
                   Learnbay
                 </Link>
