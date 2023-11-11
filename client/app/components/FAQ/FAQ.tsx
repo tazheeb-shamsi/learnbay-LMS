@@ -25,11 +25,11 @@ const FAQ = (props: Props) => {
   };
   return (
     <div>
-      <div className="w-[90%] 800px:w-[80%] m-auto">
+      <div className="w-[90%] 800px:w-[80%] m-auto mt-[120px]">
         <h1 className={`${styles.title}800px:text-[40px]`}>
           Frequently Asked Questions
         </h1>
-        <div className="mt-12 mb-12">
+        <div className="mt-12 mb-20">
           <div className="space-y-8">
             {questions.map((q) => (
               <div
