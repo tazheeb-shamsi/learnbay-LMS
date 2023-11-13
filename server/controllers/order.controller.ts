@@ -5,15 +5,35 @@ import { OrderInterface } from "../models/order.model";
 import userModel from "../models/user.model";
 import courseModel from "../models/course.model";
 import { getAllOrderService, newOrder } from "../services/order.service";
-import ejs from "ejs";
-import path from "path";
+
 import sendEmail from "../utils/sendMail";
 import notificationModel from "../models/notification.model";
+
+import dotenv from "dotenv";
+import stripe from "stripe";
+import { redis } from "../utils/redis";
+
+dotenv.config();
+
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+const stripeInstance = new stripe(stripeSecretKey);
 
 export const createOrder = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { courseId, payment_info } = req.body as OrderInterface;
+      if (payment_info) {
+        if ("id" in payment_info) {
+          const paymentIntentId = payment_info.id;
+          const paymentIntent = await stripeInstance.paymentIntents.retrieve(
+            paymentIntentId
+          );
+
+          if (paymentIntent.status !== "succeeded") {
+            return next(new ErrorHandler("Unauthorized payment", 400));
+          }
+        }
+      }
       const user = await userModel.findById(req.user?._id);
       const isCourseAlreadyPurchased = user?.courses.some(
         (course: any) => course._id.toString() === courseId
@@ -66,6 +86,8 @@ export const createOrder = catchAsyncError(
       }
 
       user?.courses.push(course?._id);
+
+      await redis.set(req.user?._id, JSON.stringify(user));
       await user?.save();
 
       //sending notification to Instructor...
@@ -92,6 +114,40 @@ export const getAllOrders = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       getAllOrderService(res);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  }
+);
+
+// Stripe Order Controllers--
+export const sendStripePublishableKey = catchAsyncError(
+  async (req: Request, res: Response) => {
+    res.status(200).json({
+      publishablekey: process.env.STRIPE_PUBLISHABLE_KEY,
+    });
+  }
+);
+
+//payment intent --
+export const newPayment = catchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const myPayment = await stripeInstance.paymentIntents.create({
+        amount: req.body.amount,
+        currency: "INR",
+        metadata: {
+          company: "Learnbay",
+        },
+        automatic_payment_methods: {
+          enabled: true,
+        },
+      });
+
+      res.status(201).json({
+        succes: true,
+        client_secret: myPayment.client_secret,
+      });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
     }
