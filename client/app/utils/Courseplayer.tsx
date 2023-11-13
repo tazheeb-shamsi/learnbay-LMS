@@ -29,7 +29,7 @@ const Courseplayer: FC<Props> = ({ videoUrl }) => {
         <iframe
           src={`https://player.vdocipher.com/v2/?otp=${videoData?.otp}&playbackInfo=${videoData?.playbackInfo}&player=s5VbYVh8vMnDtUdG`}
           style={{
-            width: "90%",
+            width: "100%",
             height: "100%",
             position: "absolute",
             top: 0,

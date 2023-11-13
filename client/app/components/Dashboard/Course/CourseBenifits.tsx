@@ -80,7 +80,7 @@ const CourseBenifits: FC<Props> = ({
 
       <div>
         <label htmlFor="" className={`${styles.label} text-[20px]`}>
-          What are the prerequisites for this course?
+          What are the prerequisites for starting this course?
         </label>
         <br />
         {prerequisites.map((prerequisite: any, index: number) => (

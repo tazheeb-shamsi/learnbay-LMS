@@ -12,8 +12,6 @@ const Courses = (props: Props) => {
     setCourses(data?.course);
   }, [data]);
 
-  console.log("COURSES==>", data);
-  console.log("UserCourses==>", courses);
 
   return (
     <div>

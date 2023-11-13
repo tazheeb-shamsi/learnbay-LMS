@@ -20,8 +20,8 @@ const CoursePreview: FC<Props> = ({
   handleCreateCourse,
 }) => {
   const discountPercentage =
-    (courseData?.estimatedPrice -
-      courseData?.price / courseData?.estimatedPrice) *
+    ((courseData?.estimatedPrice - courseData?.price) /
+      courseData?.estimatedPrice) *
     100;
   const discountPercentagePrice = discountPercentage.toFixed(0);
 

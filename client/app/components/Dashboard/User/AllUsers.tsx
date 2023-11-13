@@ -11,6 +11,7 @@ import {
 } from "@/redux/features/user/userApi";
 import { styles } from "@/app/styles/style";
 import toast from "react-hot-toast";
+import { formatDate } from "@/app/utils/formatDate";
 
 type Props = {
   isTeam: boolean;
@@ -68,15 +69,6 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
     deleteSuccess,
     deleteError,
   ]);
-
-   const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "long",
-    };
-    return date.toLocaleString(undefined, options);
-  };
 
   const columns = [
     // { field: "id", headerName: "ID", flex: 0.5 },

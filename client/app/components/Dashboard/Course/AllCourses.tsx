@@ -12,8 +12,11 @@ import Loader from "../../Loader/Loader";
 import { styles } from "@/app/styles/style";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import { formatDate } from "@/app/utils/formatDate";
 
 type Props = {};
+
+
 
 const AllCourses = (props: Props) => {
   const { theme, setTheme } = useTheme();
@@ -26,14 +29,7 @@ const AllCourses = (props: Props) => {
   );
   const [deleteCourse, { isSuccess, error }] = useDeleteCourseMutation({});
 
-  const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "long",
-    };
-    return date.toLocaleString(undefined, options);
-  };
+  
 
   const columns = [
     // { field: "id", headerName: "ID", flex: 0.5 },

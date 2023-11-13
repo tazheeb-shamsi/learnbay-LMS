@@ -7,6 +7,7 @@ import { AiOutlineMail } from "react-icons/ai";
 import Loader from "../../Loader/Loader";
 import { Box } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { formatDate } from "@/app/utils/formatDate";
 
 type Props = {
   isDashboard?: boolean;
@@ -20,14 +21,6 @@ const AllInvoices: FC<Props> = ({ isDashboard }) => {
 
   const [orderData, setOrderData] = useState<any>([]);
 
-  const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "long",
-    };
-    return date.toLocaleString(undefined, options);
-  };
 
   useEffect(() => {
     if (data && usersData && coursesData) {
@@ -50,7 +43,6 @@ const AllInvoices: FC<Props> = ({ isDashboard }) => {
     }
   }, [data, usersData, coursesData]);
 
-  console.log("orderData==>", orderData);
   const columns: any = [
     { field: "id", headName: "ID", flex: 0.3 },
     { field: "userName", headName: "Name", flex: isDashboard ? 0.6 : 0.5 },

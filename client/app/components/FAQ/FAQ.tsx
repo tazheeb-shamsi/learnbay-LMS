@@ -18,7 +18,6 @@ const FAQ = (props: Props) => {
       setQuestions(data?.layout.faq);
     }
   }, [data]);
-  console.log(questions);
 
   const toggledQuestion = (id: any) => {
     setActiveQuestion(activeQuestion === id ? null : id);
