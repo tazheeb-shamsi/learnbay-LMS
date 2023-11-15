@@ -35,59 +35,6 @@ export const addCourse = catchAsyncError(
   }
 );
 
-// Update course   -- only for admin
-// export const updateCourse = catchAsyncError(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//       const data = req.body;
-
-//       const thumbnail = data.thumbnail;
-
-//       const courseId = req.params.id;
-
-//       const courseData = (await courseModel.findById(courseId)) as any;
-
-//       if (
-//         thumbnail &&
-//         typeof thumbnail === "string" &&
-//         !thumbnail.startsWith("https")
-//       ) {
-//         await cloudinary.v2.uploader.destroy(courseData.thumbnail.public_id);
-//         const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
-//           folder: "courses",
-//         });
-
-//         data.thumbnail = {
-//           public_id: myCloud.public_id,
-//           url: myCloud.secure_url,
-//         };
-//       }
-
-//       if (typeof thumbnail === "string" && thumbnail.startsWith("https")) {
-//         data.thumbnail = {
-//           public_id: courseData?.thumbnail.public_id,
-//           url: courseData?.thumbnail.url,
-//         };
-//       }
-
-//       const course = await courseModel.findById(
-//         courseId,
-//         {
-//           $set: data,
-//         },
-//         { new: true }
-//       );
-
-//       res.status(200).json({
-//         status: "success",
-//         course,
-//       });
-//     } catch (error: any) {
-//       return next(new ErrorHandler(error.message, 500));
-//     }
-//   }
-// );
-
 export const updateCourse = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -95,7 +42,7 @@ export const updateCourse = catchAsyncError(
       const thumbnail = data.thumbnail;
       const courseId = req.params.id;
 
-      const courseData = await courseModel.findById(courseId)as any;
+      const courseData = (await courseModel.findById(courseId)) as any;
 
       if (
         thumbnail &&
@@ -290,6 +237,7 @@ export const addQuestion = catchAsyncError(
       });
 
       await course?.save();
+      await redis.set(courseId, JSON.stringify(course), "EX", 259200); // 3days
       res.status(200).json({
         status: "true",
         course,
@@ -338,10 +286,13 @@ export const addAnswerToTheQuestion = catchAsyncError(
       const newAnswer: any = {
         user: req.user,
         answer,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
       // add this answer to course content
       question.questionReplies.push(newAnswer);
       await course?.save();
+      await redis.set(courseId, JSON.stringify(course), "EX", 259200); // 3days
 
       //some validations have been performed
       if (req.user?._id === question.user._id) {
@@ -410,7 +361,7 @@ export const addReview = catchAsyncError(
 
       const reviewData: any = {
         user: req.user,
-        comment: review,
+        review: review,
         rating: rating,
       };
 
@@ -427,16 +378,12 @@ export const addReview = catchAsyncError(
       }
 
       await course?.save();
-
-      const notification = {
-        title: "New Review Recieved",
-        message: `${req.user?.name} has added a review on ${course?.name}`,
-      };
+      await redis.set(courseId, JSON.stringify(course), "EX", 259200); // 3days
 
       //sending notification to Instructor...
       await notificationModel.create({
         user: req.user?._id,
-        title: "New Question Recieved",
+        title: "New Review Recieved",
         message: `${req.user?.name} has added a review on ${course?.name}`,
       });
 
@@ -452,14 +399,14 @@ export const addReview = catchAsyncError(
 
 // add reply to review
 interface AddReviewDataInterface {
-  comment: string;
+  reviewReply: string;
   courseId: string;
   reviewId: string;
 }
 export const addReplyToReview = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { comment, courseId, reviewId } =
+      const { reviewReply, courseId, reviewId } =
         req.body as AddReviewDataInterface;
       const course = await courseModel.findById(courseId);
 
@@ -467,24 +414,30 @@ export const addReplyToReview = catchAsyncError(
         new ErrorHandler("Course not found.", 404);
       }
 
-      const review = course?.reviews?.find(
+      const getReview = course?.reviews?.find(
         (rev: any) => rev._id.toString() === reviewId
       );
-      if (!review) {
+
+      if (!getReview) {
         new ErrorHandler("Review not found.", 404);
       }
 
       const replyData: any = {
         user: req.user,
-        comment,
+        reviewReply,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
 
-      if (!review.commentReplies) {
-        review.commentReplies = [];
+      if (!getReview.reviewReplies) {
+        getReview.reviewReplies = [];
       }
 
-      review?.commentReplies.push(replyData);
+      getReview?.reviewReplies.push(replyData);
+
       await course?.save();
+      await redis.set(courseId, JSON.stringify(course), "EX", 259200); // 3days
+
       res.status(200).json({
         status: "true",
         course,

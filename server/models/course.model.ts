@@ -18,8 +18,8 @@ const questionSchema = new Schema<CommentInterface>(
 interface ReviewInterface extends Document {
   user: UserInterface;
   rating: number;
-  comment: string;
-  commentReplies: CommentInterface[];
+  review: string;
+  reviewReplies: CommentInterface[];
 }
 const reviewSchema = new Schema<ReviewInterface>(
   {
@@ -28,8 +28,8 @@ const reviewSchema = new Schema<ReviewInterface>(
       type: Number,
       default: 0,
     },
-    comment: String,
-    commentReplies: [Object],
+    review: String,
+    reviewReplies: [Object],
   },
   { timestamps: true }
 );

@@ -9,6 +9,10 @@ import CourseContentList from "../Course/CourseContentList";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckOutForm from "../Payment/CheckOutForm";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
+import defaultAvatar from "../../../public/assets/avatar.png";
+
+import Image from "next/image";
+import { VscVerifiedFilled } from "react-icons/vsc";
 
 type Props = {
   course: any;
@@ -22,7 +26,6 @@ const CourseDetails: FC<Props> = ({ course, clientSecret, stripePromise }) => {
   // const { user } = useSelector((state: any) => state.auth);
   const { data: userData } = useLoadUserQuery(undefined, {});
   const user = userData?.user;
-
 
   const discountPercentage =
     ((course?.estimatedPrice - course?.price) / course?.estimatedPrice) * 100;
@@ -127,12 +130,11 @@ const CourseDetails: FC<Props> = ({ course, clientSecret, stripePromise }) => {
               <div className="800px:flex items-center">
                 <RatingStars rating={course?.ratings} />
                 <div className="mb-2 800px:mb-[unset]" />
-
                 <h5 className="text-25px font-Poppins dark:text-white text-black">
                   {Number.isInteger(course?.ratings)
                     ? course.ratings.toFixed(1)
                     : course.ratings.toFixed(2)}{" "}
-                  Course Ratings • {course?.reviews?.length} Reviews
+                  Ratings • {course?.reviews?.length} Reviews
                 </h5>
               </div>
               <br />
@@ -141,10 +143,18 @@ const CourseDetails: FC<Props> = ({ course, clientSecret, stripePromise }) => {
                   <div className="w-full pb-4" key={index}>
                     <div className="flex">
                       <div className="w-[50px] h-[50px]">
-                        <div className="w-[50px] h-[50px] bg-slte-600 rounded-[50px] flex items-center justify-center cursor-pointer">
-                          <h1 className="uppercase text-18px dark:text-white text-black">
-                            {item.user.name.slice(0, 2)}
-                          </h1>
+                        <div>
+                          <Image
+                            src={
+                              item.user.avatar
+                                ? item.user.avatar.url
+                                : defaultAvatar
+                            }
+                            width={50}
+                            height={50}
+                            alt="avatar"
+                            className="rounded-full w-[30px] h-[30px] object-contain"
+                          />
                         </div>
                       </div>
 
@@ -157,10 +167,10 @@ const CourseDetails: FC<Props> = ({ course, clientSecret, stripePromise }) => {
                         </div>
 
                         <p className="dark:text-white text-black">
-                          {item.comment}
+                          {item.review}
                         </p>
                         <small className="text-[#000000d1] dark:text-[#ffffff83]">
-                          {formatDate(item.ceatedAt)}
+                          {formatDate(item.createdAt)}
                         </small>
                       </div>
 
@@ -171,6 +181,46 @@ const CourseDetails: FC<Props> = ({ course, clientSecret, stripePromise }) => {
                         <RatingStars rating={item.rating} />
                       </div>
                     </div>
+
+                    {item.reviewReplies.map((i: any, index: number) => (
+                      <>
+                        <div
+                          className="w-full flex 800px:ml-16 my-5 text-black dark:text-white"
+                          key={index}
+                        >
+                          <div>
+                            <Image
+                              src={
+                                i.user.avatar
+                                  ? i.user.avatar.url
+                                  : defaultAvatar
+                              }
+                              width={50}
+                              height={50}
+                              alt="avatar"
+                              className="rounded-full w-[30px] h-[30px] object-contain"
+                            />
+                          </div>
+                          <div className="pl-3 text-black dark:text-white">
+                            <div className="flex items-center">
+                              <h5 className="text-[20px] mr-1">
+                                {i?.user.name}
+                              </h5>
+                              {i.user.role === "admin" && (
+                                <VscVerifiedFilled
+                                  fill="#4c68d7 "
+                                  className="mb-2"
+                                />
+                              )}
+                            </div>
+                            <p>{i?.reviewReply}</p>
+                            <small className="text-[#000000b8] dark:text-[#ffffff83]">
+                              {formatDate(i?.createdAt)} {"•"}
+                            </small>
+                          </div>
+                        </div>
+                      </>
+                    ))}
                   </div>
                 )
               )}

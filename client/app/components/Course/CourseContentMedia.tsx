@@ -6,7 +6,6 @@ import {
   AiFillStar,
   AiOutlineArrowLeft,
   AiOutlineArrowRight,
-  AiOutlineSend,
   AiOutlineStar,
 } from "react-icons/ai";
 import defaultAvatar from "../../../public/assets/avatar.png";
@@ -15,9 +14,13 @@ import toast from "react-hot-toast";
 import {
   useAddAnswerToQuestionMutation,
   useAddNewQuestionMutation,
+  useAddReplyToReviewMutation,
+  useAddReviewToCourseMutation,
+  useGetCourseDetailsQuery,
 } from "@/redux/features/courses/coursesAPi";
 import { formatDate } from "@/app/utils/formatDate";
 import { BiMessage } from "react-icons/bi";
+import RatingStars from "@/app/utils/RatingStars";
 
 type Props = {
   data: any;
@@ -41,7 +44,19 @@ const CourseContentMedia: FC<Props> = ({
   const [answer, setAnswer] = useState("");
   const [rating, setRating] = useState(1);
   const [review, setReview] = useState("");
+  const [isReviewReply, setIsReviewReply] = useState(false);
+  const [reviewReply, setReviewReply] = useState("");
+  console.log("----->", reviewReply);
   const [questionId, setQuestionId] = useState("");
+  const [reviewId, setReviewId] = useState("");
+
+  const { data: courseData, refetch: courseRefetch } = useGetCourseDetailsQuery(
+    courseId,
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
+  const course = courseData?.course;
 
   const [
     addNewQuestion,
@@ -53,15 +68,33 @@ const CourseContentMedia: FC<Props> = ({
     {
       isSuccess: answerSuccess,
       isLoading: answerCreationLoading,
-      error: anserCreationError,
+      error: answerCreationError,
     },
   ] = useAddAnswerToQuestionMutation({});
 
-  const isReviewExists = data?.reviews?.find(
+  const [
+    addReviewToCourse,
+    {
+      isSuccess: addReviewSuccess,
+      isLoading: loadingWhileAddingReview,
+      error: errorWhileAddingReview,
+    },
+  ] = useAddReviewToCourseMutation({});
+
+  const [
+    addReplyToReview,
+    {
+      isSuccess: replyToReviewSuccess,
+      isLoading: loadingWhileReplyToReview,
+      error: errorWhileReplyToReview,
+    },
+  ] = useAddReplyToReviewMutation({});
+
+  const isReviewExists = course?.reviews?.find(
     (item: any) => item.user._id === user._id
   );
 
-  const handleQuestionSubmit = (e) => {
+  const handleQuestionSubmit = (e: any) => {
     if (question.length === 0) {
       toast.error("Please fill the question field");
     } else {
@@ -78,24 +111,60 @@ const CourseContentMedia: FC<Props> = ({
     if (isSuccess) {
       setQuestion("");
       refetch();
+      toast.success("Your Question Adeed Successfully");
     }
     if (answerSuccess) {
       setAnswer("");
       refetch();
+      toast.success("Your Answer Adeed Successfully");
+    }
+    if (addReviewSuccess) {
+      setReview("");
+      setRating(1);
+      courseRefetch();
+      toast.success("Your Review Adeed Successfully");
+    }
+    if (replyToReviewSuccess) {
+      setReviewReply("");
+      refetch();
+      toast.success("Your Reply To Review Adeed Successfully");
     }
     if (error) {
       if ("data" in error) {
-        const errMsg = error.data as any;
-        toast.error(errMsg.message);
+        const errMsg = error as any;
+        toast.error(errMsg.data.message);
       }
     }
-    if (anserCreationError) {
-      if ("data" in anserCreationError) {
-        const errMsg = anserCreationError.data as any;
-        toast.error(errMsg.message);
+    if (answerCreationError) {
+      if ("data" in answerCreationError) {
+        const errMsg = error as any;
+        toast.error(errMsg.data.message);
       }
     }
-  }, [isSuccess, answerSuccess, refetch, error, anserCreationError]);
+    if (errorWhileAddingReview) {
+      if ("data" in errorWhileAddingReview) {
+        const errMsg = error as any;
+        toast.error(errMsg.data.message);
+      }
+    }
+    if (errorWhileReplyToReview) {
+      if ("data" in errorWhileReplyToReview) {
+        const errMsg = error as any;
+        toast.error(errMsg.data.message);
+      }
+    }
+  }, [
+    refetch,
+    courseRefetch,
+    isSuccess,
+    answerSuccess,
+    error,
+    answerCreationError,
+    addReviewSuccess,
+    errorWhileAddingReview,
+    replyToReviewSuccess,
+    errorWhileReplyToReview,
+  ]);
 
   const handleReplySubmit = () => {
     addAnswerToQuestion({
@@ -104,9 +173,33 @@ const CourseContentMedia: FC<Props> = ({
       questionId: questionId,
       contentId: data[activeVideo]._id,
     });
-    toast.success("Your Answer Adeed Successfully");
   };
 
+  const handleReviewSubmit = async () => {
+    if (review.length === 0) {
+      toast.error("Please fill the review field");
+    } else {
+      addReviewToCourse({
+        review,
+        rating,
+        courseId: courseId,
+      });
+    }
+  };
+
+  const handleReviewReplySubmit = async () => {
+    if (!loadingWhileReplyToReview) {
+      if (reviewReply.length === 0) {
+        toast.error("Please fill the reply field");
+      } else {
+        addReplyToReview({
+          reviewId,
+          courseId: courseId,
+          reviewReply: reviewReply,
+        });
+      }
+    }
+  };
   return (
     <div className="w-[95%] 800px:w-[86%] py-4 m-auto">
       <Courseplayer
@@ -187,42 +280,6 @@ const CourseContentMedia: FC<Props> = ({
         </div>
       )}
 
-      {/* {activeBar === 2 && (
-        <>
-          <div className="w-full flex text-black dark:text-white">
-            <Image
-              src={user.avatar ? user.avatar.url : defaultAvatar}
-              width={50}
-              height={50}
-              alt="avatar"
-              className="rounded-full w-[50px] h-[50px] object-contain"
-            />
-            <textarea
-              name=""
-              id=""
-              cols={40}
-              rows={5}
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="Write your question here..."
-              className="outline-none bg-transparent ml-3 border border-[#ffffff57] 800px:w-full p-2 rounded w-[90%] 800px:text-[18px] font-Poppins"
-            />
-          </div>
-          <div className="w-full flex justify-row">
-            <div
-              className={`${styles.button} !w-[120px] !h-[40px] text-[18px] mt-5
-              `}
-              // ${
-              //   isLoading && "cursor-no-drop"
-              //   }
-              // onClick={isLoading ? null : handleSubmitComment}
-            >
-              <AiOutlineSend size={20} />
-            </div>
-          </div>
-        </>
-      )} */}
-
       {activeBar === 2 && (
         <>
           <div className="w-full flex text-black dark:text-white">
@@ -247,7 +304,7 @@ const CourseContentMedia: FC<Props> = ({
               <div className="absolute bottom-0 right-0 mb-2 mr-2">
                 <div
                   className={`p-2 cursor-pointer ${
-                    LoadingWhileCreatingNewQueston && "cursor-not-allowed"
+                    LoadingWhileCreatingNewQueston && "cursor-no-drop"
                   }`}
                   onClick={
                     LoadingWhileCreatingNewQueston
@@ -265,7 +322,6 @@ const CourseContentMedia: FC<Props> = ({
           <div>
             <ComposeReply
               data={data}
-              user={user}
               activeVideo={activeVideo}
               answer={answer}
               setAnswer={setAnswer}
@@ -329,8 +385,14 @@ const CourseContentMedia: FC<Props> = ({
                       />
                       <div className="absolute bottom-0 right-0 mb-2 mr-2">
                         <div
-                          className="p-2 cursor-pointer text-black dark:text-white"
-                          // onClick={isLoading ? null : handleSubmitComment}
+                          className={`p-2 cursor-pointer ${
+                            loadingWhileAddingReview && "cursor-no-drop"
+                          }`}
+                          onClick={
+                            loadingWhileAddingReview
+                              ? () => {}
+                              : handleReviewSubmit
+                          }
                         >
                           <VscSend size={25} />
                         </div>
@@ -340,6 +402,114 @@ const CourseContentMedia: FC<Props> = ({
                 </div>
               </>
             )}
+            <br />
+            <div className="w-full h-[1px] dark:bg-[#ffffff3b] bg-[#68686842]" />
+            <div className="w-full">
+              {(course?.reviews && [...course.reviews].reverse()).map(
+                (item: any, index: number) => (
+                  <>
+                    <div className="w-full my-5">
+                      <div className="w-full flex text-black dark:text-white">
+                        <Image
+                          src={user.avatar ? user.avatar.url : defaultAvatar}
+                          width={50}
+                          height={50}
+                          alt="avatar"
+                          className="rounded-full w-[50px] h-[50px] object-contain"
+                        />
+                        <div className="ml-3 text-black dark:text-white">
+                          <h1 className="text-[20px] ">{item?.user.name}</h1>
+                          <RatingStars rating={item.rating} />
+
+                          <p>{item?.review}</p>
+                          <small className="text-[#000000b8] dark:text-[#ffffff83]">
+                            {formatDate(item?.createdAt)} {"•"}
+                          </small>
+                        </div>
+                      </div>
+
+                      {user.role === "admin" && (
+                        <span
+                          className={`${styles.label} cursor-pointer float-right`}
+                          onClick={() => {
+                            setIsReviewReply(true), setReviewId(item._id);
+                          }}
+                        >
+                          Add Reply
+                        </span>
+                      )}
+
+                      {isReviewReply && (
+                        <div className="flex w-full relative">
+                          <textarea
+                            cols={40}
+                            rows={1}
+                            placeholder="Enter your reply"
+                            value={reviewReply}
+                            onChange={(e) => setReviewReply(e.target.value)}
+                            className=" text-black dark:text-white block 800px:ml-10  outline-none bg-transparent border-b dark:border-[#ffffff57] border-[#68686842] p-[5px] w-[90%]"
+                          />
+                          <button
+                            type="submit"
+                            disabled={
+                              reviewReply === "" || loadingWhileReplyToReview
+                            }
+                            className={`${
+                              reviewReply === ""
+                                ? "cursor-not-allowed"
+                                : "cursor-pointer"
+                            } p-2  text-black dark:text-white`}
+                            onClick={handleReviewReplySubmit}
+                          >
+                            <VscSend size={25} />
+                          </button>
+                        </div>
+                      )}
+
+                      {item.reviewReplies.map((i: any, index: number) => (
+                        <>
+                          <div
+                            className="w-full flex 800px:ml-16 my-5 text-black dark:text-white"
+                            key={index}
+                          >
+                            <div>
+                              <Image
+                                src={
+                                  i.user.avatar
+                                    ? i.user.avatar.url
+                                    : defaultAvatar
+                                }
+                                width={50}
+                                height={50}
+                                alt="avatar"
+                                className="rounded-full w-[30px] h-[30px] object-contain"
+                              />
+                            </div>
+                            <div className="pl-3 text-black dark:text-white">
+                              <div className="flex items-center">
+                                <h5 className="text-[20px] mr-1">
+                                  {i?.user.name}
+                                </h5>
+                                {i.user.role === "admin" && (
+                                  <VscVerifiedFilled
+                                    fill="#4c68d7 "
+                                    className="mb-2"
+                                  />
+                                )}
+                              </div>
+                              <p>{i?.reviewReply}</p>
+                              <small className="text-[#000000b8] dark:text-[#ffffff83]">
+                                {formatDate(i?.createdAt)} {"•"}
+                              </small>
+                            </div>
+                          </div>
+                        </>
+                      ))}
+                    </div>
+                  </>
+                )
+              )}
+            </div>
           </>
         </div>
       )}
@@ -349,7 +519,6 @@ const CourseContentMedia: FC<Props> = ({
 
 const ComposeReply = ({
   data,
-  user,
   activeVideo,
   answer,
   setAnswer,
@@ -363,13 +532,10 @@ const ComposeReply = ({
         {data[activeVideo].questions.map((item: any, index: number) => (
           <ReplyItem
             key={index}
-            index={index}
             item={item}
-            data={data}
             answer={answer}
             setAnswer={setAnswer}
             setQuestionId={setQuestionId}
-            activeVideo={activeVideo}
             handleReplySubmit={handleReplySubmit}
             answerCreationLoading={answerCreationLoading}
           />
@@ -450,7 +616,9 @@ const ReplyItem = ({
                 <div className="pl-3 text-black dark:text-white">
                   <div className="flex items-center">
                     <h5 className="text-[20px] mr-1">{item?.user.name}</h5>
-                    <VscVerifiedFilled fill="#4c68d7 " className="mb-2" />
+                    {item.user.role === "admin" && (
+                      <VscVerifiedFilled fill="#4c68d7 " className="mb-2" />
+                    )}
                   </div>
                   <p>{item?.answer}</p>
                   <small className="text-[#000000b8] dark:text-[#ffffff83]">
