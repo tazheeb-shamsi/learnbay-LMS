@@ -1,5 +1,5 @@
 import RatingStars from "@/app/utils/RatingStars";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { IoCheckmarkDoneCircleOutline, IoCloseOutline } from "react-icons/io5";
 import Courseplayer from "@/app/utils/Courseplayer";
 import { formatDate } from "@/app/utils/formatDate";
@@ -18,15 +18,25 @@ type Props = {
   course: any;
   clientSecret: string;
   stripePromise: any;
+  setOpen: any;
+  setRoute: any;
 };
 
-const CourseDetails: FC<Props> = ({ course, clientSecret, stripePromise }) => {
+const CourseDetails: FC<Props> = ({
+  course,
+  clientSecret,
+  stripePromise,
+  setOpen: openAuthModal,
+  setRoute,
+}) => {
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState<any>();
 
-  // const { user } = useSelector((state: any) => state.auth);
   const { data: userData } = useLoadUserQuery(undefined, {});
-  const user = userData?.user;
 
+  useEffect(() => {
+    setUser(userData?.user);
+  }, [userData]);
   const discountPercentage =
     ((course?.estimatedPrice - course?.price) / course?.estimatedPrice) * 100;
 
@@ -36,7 +46,12 @@ const CourseDetails: FC<Props> = ({ course, clientSecret, stripePromise }) => {
     user && user.courses.find((item: any) => item._id === course._id);
 
   const handleOrder = (e: any) => {
-    setOpen(true);
+    if (user) {
+      setOpen(true);
+    } else {
+      setRoute("Login");
+      openAuthModal(true);
+    }
   };
   return (
     <div>
