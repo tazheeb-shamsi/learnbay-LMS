@@ -114,11 +114,11 @@ const CourseContentList: FC<Props> = ({
                             color="#1cdada"
                           />
                         </div>
-                        <h1 className="text-[18px] inline-block break-words text-black dark:text-white">
+                        <h1 className="text-[18px] inline-block break-words text-white">
                           {item.title}
                         </h1>
                       </div>
-                      <h5 className="pl-8 text-black dark:text-white">
+                      <h5 className="pl-8 text-white">
                         {item.videoLength > 60
                           ? contentLength.toFixed(2)
                           : item.videoLength}

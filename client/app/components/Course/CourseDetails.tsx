@@ -1,7 +1,6 @@
 import RatingStars from "@/app/utils/RatingStars";
 import React, { FC, useState } from "react";
 import { IoCheckmarkDoneCircleOutline, IoCloseOutline } from "react-icons/io5";
-import { useSelector } from "react-redux";
 import Courseplayer from "@/app/utils/Courseplayer";
 import { formatDate } from "@/app/utils/formatDate";
 import Link from "next/link";
@@ -9,6 +8,7 @@ import { styles } from "@/app/styles/style";
 import CourseContentList from "../Course/CourseContentList";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckOutForm from "../Payment/CheckOutForm";
+import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 
 type Props = {
   course: any;
@@ -19,7 +19,10 @@ type Props = {
 const CourseDetails: FC<Props> = ({ course, clientSecret, stripePromise }) => {
   const [open, setOpen] = useState(false);
 
-  const { user } = useSelector((state: any) => state.auth);
+  // const { user } = useSelector((state: any) => state.auth);
+  const { data: userData } = useLoadUserQuery(undefined, {});
+  const user = userData?.user;
+
 
   const discountPercentage =
     ((course?.estimatedPrice - course?.price) / course?.estimatedPrice) * 100;

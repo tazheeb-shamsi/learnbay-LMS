@@ -6,16 +6,43 @@ interface CommentInterface extends Document {
   question: string;
   questionReplies: CommentInterface[];
 }
+const questionSchema = new Schema<CommentInterface>(
+  {
+    user: Object,
+    question: String,
+    questionReplies: [Object],
+  },
+  { timestamps: true }
+);
+
 interface ReviewInterface extends Document {
   user: UserInterface;
   rating: number;
   comment: string;
   commentReplies: CommentInterface[];
 }
+const reviewSchema = new Schema<ReviewInterface>(
+  {
+    user: Object,
+    rating: {
+      type: Number,
+      default: 0,
+    },
+    comment: String,
+    commentReplies: [Object],
+  },
+  { timestamps: true }
+);
+
 interface LinkInterface extends Document {
   title: string;
   url: string;
 }
+const linkSchema = new Schema<LinkInterface>({
+  title: String,
+  url: String,
+});
+
 interface CourseDataInterface extends Document {
   title: string;
   description: string;
@@ -28,6 +55,17 @@ interface CourseDataInterface extends Document {
   questions: CommentInterface[];
   suggestions: string;
 }
+const courseDataSchema = new Schema<CourseDataInterface>({
+  title: String,
+  description: String,
+  videoUrl: String,
+  videoLength: Number,
+  videoSection: String,
+  videoPlayer: String,
+  links: [linkSchema],
+  questions: [questionSchema],
+  suggestions: String,
+});
 
 interface CourseInterface extends Document {
   name: string;
@@ -46,40 +84,6 @@ interface CourseInterface extends Document {
   ratings?: number;
   purchased?: number;
 }
-
-const reviewSchema = new Schema<ReviewInterface>({
-  user: Object,
-  rating: {
-    type: Number,
-    default: 0,
-  },
-  comment: String,
-  commentReplies: [Object],
-});
-
-const linkSchema = new Schema<LinkInterface>({
-  title: String,
-  url: String,
-});
-
-const questionSchema = new Schema<CommentInterface>({
-  user: Object,
-  question: String,
-  questionReplies: [Object],
-});
-
-const courseDataSchema = new Schema<CourseDataInterface>({
-  title: String,
-  description: String,
-  videoUrl: String,
-  videoLength: Number,
-  videoSection: String,
-  videoPlayer: String,
-  links: [linkSchema],
-  questions: [questionSchema],
-  suggestions: String,
-});
-
 const courseSchema = new Schema<CourseInterface>(
   {
     name: { type: String, required: true },
@@ -90,11 +94,9 @@ const courseSchema = new Schema<CourseInterface>(
     thumbnail: {
       public_id: {
         type: String,
-        // required: true,
       },
       url: {
         type: String,
-        // required: true,
       },
     },
     tags: {
