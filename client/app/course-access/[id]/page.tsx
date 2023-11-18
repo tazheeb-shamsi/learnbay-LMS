@@ -26,7 +26,7 @@ const Page = ({ params }: Props) => {
         redirect("/");
       }
     }
-  }, [data]);
+  }, [data,error,id]);
 
   return (
     <>

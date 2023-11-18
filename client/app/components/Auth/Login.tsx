@@ -15,7 +15,7 @@ import { signIn } from "next-auth/react";
 type Props = {
   setRoute: (route: string) => void;
   setOpen: (open: boolean) => void;
-  refetch:any;
+  refetch: any;
 };
 
 const schema = Yup.object().shape({
@@ -53,7 +53,7 @@ const Login: FC<Props> = ({ setRoute, setOpen, refetch }) => {
         toast.error(errorData.message);
       }
     }
-  }, [isSuccess, error]);
+  }, [isSuccess, error, refetch]);
 
   const { errors, touched, values, handleChange, handleSubmit } = formik;
   return (
