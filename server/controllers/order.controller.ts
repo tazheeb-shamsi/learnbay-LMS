@@ -7,6 +7,8 @@ import courseModel from "../models/course.model";
 import { getAllOrderService, newOrder } from "../services/order.service";
 
 import sendEmail from "../utils/sendMail";
+import ejs from "ejs";
+import path from "path";
 import notificationModel from "../models/notification.model";
 
 import dotenv from "dotenv";
@@ -15,7 +17,7 @@ import { redis } from "../utils/redis";
 
 dotenv.config();
 
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+const stripeSecretKey: any = process.env.STRIPE_SECRET_KEY;
 const stripeInstance = new stripe(stripeSecretKey);
 
 export const createOrder = catchAsyncError(
@@ -24,7 +26,7 @@ export const createOrder = catchAsyncError(
       const { courseId, payment_info } = req.body as OrderInterface;
       if (payment_info) {
         if ("id" in payment_info) {
-          const paymentIntentId = payment_info.id;
+          const paymentIntentId: any = payment_info.id;
           const paymentIntent = await stripeInstance.paymentIntents.retrieve(
             paymentIntentId
           );
@@ -72,6 +74,11 @@ export const createOrder = catchAsyncError(
         },
       };
 
+      const html = await ejs.renderFile(
+        path.join(__dirname, "../mail/orderConfirmationMail.ejs"),
+        { order: emailData }
+      );
+
       try {
         if (user) {
           await sendEmail({
@@ -87,13 +94,13 @@ export const createOrder = catchAsyncError(
 
       user?.courses.push(course?._id);
 
-      await redis.set(req.user?._id, JSON.stringify(user));
       await user?.save();
+      await redis.set(req.user?._id, JSON.stringify(user));
 
       //sending notification to Instructor...
       await notificationModel.create({
         user: user?._id,
-        title: "New Order Placed",
+        title: "New Order Received",
         message: `${user?.name} have placed order now!`,
       });
 

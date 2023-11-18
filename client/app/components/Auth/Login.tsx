@@ -15,6 +15,7 @@ import { signIn } from "next-auth/react";
 type Props = {
   setRoute: (route: string) => void;
   setOpen: (open: boolean) => void;
+  refetch:any;
 };
 
 const schema = Yup.object().shape({
@@ -26,7 +27,7 @@ const schema = Yup.object().shape({
     .required("Please enter your password"),
 });
 
-const Login: FC<Props> = ({ setRoute, setOpen }) => {
+const Login: FC<Props> = ({ setRoute, setOpen, refetch }) => {
   const [login, { isSuccess, isLoading, data, error }] = useLoginMutation();
   const [show, setShow] = useState(false);
   const formik = useFormik({
@@ -42,9 +43,9 @@ const Login: FC<Props> = ({ setRoute, setOpen }) => {
 
   useEffect(() => {
     if (isSuccess) {
-      const message = data?.message || "Logged-In Successfully";
-      toast.success(message);
+      toast.success("Logged-In Successfully");
       setOpen(false);
+      refetch();
     }
     if (error) {
       if ("data" in error) {
@@ -128,7 +129,7 @@ const Login: FC<Props> = ({ setRoute, setOpen }) => {
           <AiFillGithub
             size={30}
             className="cursor-pointer ml-2  text-black dark:text-white"
-            onClick={() => signIn("github",)}
+            onClick={() => signIn("github")}
           />
         </div>
         <h5 className="text-center pt-4 font-Poppins text-[14px]  text-black dark:text-white">

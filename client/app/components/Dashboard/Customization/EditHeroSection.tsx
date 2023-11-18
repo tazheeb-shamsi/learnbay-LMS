@@ -39,7 +39,7 @@ const EditHeroSection: FC<Props> = (props: Props) => {
         toast.error(errorMessage.message);
       }
     }
-  }, [data, isSuccess, error]);
+  }, [data, isSuccess, error, refetch]);
 
   const handleUpdateHeroImage = (e: any) => {
     const file = e.target.files?.[0];

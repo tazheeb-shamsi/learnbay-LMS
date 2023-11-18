@@ -36,6 +36,7 @@ const Hero: FC<Props> = (props) => {
               alt=""
               width={400}
               height={400}
+              style={{ objectFit: "contain" }}
               className="object-contain 1100px:max-w-[90%] w-[90%] 1500px:max-w-[85%] h-[auto] z-[10]"
             />
           </div>
@@ -69,7 +70,8 @@ const Hero: FC<Props> = (props) => {
             <div className="1500px:w-[55%] 1100px:w-[78%] w-[90%] flex items-center">
               <Image
                 src={require("../../../public/assets/client-1.jpg")}
-                alt=""
+                  alt=""
+                  
                 className="rounded-full"
               />
               <Image

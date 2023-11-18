@@ -1,5 +1,6 @@
 "use client";
 
+import DashboardHero from "@/app/components/Dashboard/DashboardHero";
 import OrdersAnalytics from "../../../app/components/Dashboard/Analytics/OrdersAnalytics";
 import DashboardHeader from "@/app/components/Dashboard/DashboardHeader";
 import DashboardSidebar from "@/app/components/Dashboard/Sidebar/DashboardSidebar";
@@ -23,7 +24,7 @@ const page = (props: Props) => {
             <DashboardSidebar />
           </div>
           <div className="w-4/5 ">
-            <DashboardHeader />
+            <DashboardHero />
             <OrdersAnalytics />
           </div>
         </div>

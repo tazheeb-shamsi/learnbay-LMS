@@ -2,6 +2,7 @@
 
 import CreateCourse from "@/app/components/Dashboard/Course/CreateCourse";
 import DashboardHeader from "@/app/components/Dashboard/DashboardHeader";
+import DashboardHero from "@/app/components/Dashboard/DashboardHero";
 import DashboardSidebar from "@/app/components/Dashboard/Sidebar/DashboardSidebar";
 import Heading from "@/app/utils/Heading";
 import React from "react";
@@ -21,7 +22,7 @@ const page = (props: Props) => {
           <DashboardSidebar />
         </div>
         <div className="w-[85%]">
-          <DashboardHeader />
+          <DashboardHero />
           <CreateCourse />
         </div>
       </div>

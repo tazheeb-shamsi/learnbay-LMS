@@ -138,14 +138,15 @@ export const activateUser = catchAsyncError(
 );
 
 // Login user
-interface UserLoginInterface {
-  email: string;
-  password: string;
-}
+// interface UserLoginInterface {
+//   email: string;
+//   password: string;
+// }
 export const loginUser = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { email, password } = req.body as UserLoginInterface;
+      const { email, password } = req.body;
+      console.log("body", req.body);
       if (!email || !password) {
         return next(new ErrorHandler("Please enter email and password", 400));
       }

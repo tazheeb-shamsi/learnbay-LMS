@@ -7,12 +7,12 @@ type Props = {
 };
 
 const DashboardHero: FC<Props> = ({ isDashboard }) => {
-  const [open, setOpen] = useState();
+  const [open, setOpen] = useState(false);
+
   return (
     <div>
       <DashboardHeader open={open} setOpen={setOpen} />
-
-      {isDashboard && (<DashboardWidgets open={open} />)}
+      {isDashboard && <DashboardWidgets open={open} />}
     </div>
   );
 };

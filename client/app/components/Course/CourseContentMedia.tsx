@@ -22,6 +22,10 @@ import { formatDate } from "@/app/utils/formatDate";
 import { BiMessage } from "react-icons/bi";
 import RatingStars from "@/app/utils/RatingStars";
 
+import socketIO from "socket.io-client";
+const ENDPOINT = process.env.NEXT_PUBLIC_SOCKET_SERVER_URI || "";
+const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
+
 type Props = {
   data: any;
   user: any;
@@ -46,7 +50,6 @@ const CourseContentMedia: FC<Props> = ({
   const [review, setReview] = useState("");
   const [isReviewReply, setIsReviewReply] = useState(false);
   const [reviewReply, setReviewReply] = useState("");
-  console.log("----->", reviewReply);
   const [questionId, setQuestionId] = useState("");
   const [reviewId, setReviewId] = useState("");
 
@@ -112,17 +115,34 @@ const CourseContentMedia: FC<Props> = ({
       setQuestion("");
       refetch();
       toast.success("Your Question Adeed Successfully");
+      socketId.emit("notification", {
+        userId: user._id,
+        title: "New Question Recieved",
+        message: `You have a new question in ${data[activeVideo].title} !`,
+      });
     }
     if (answerSuccess) {
       setAnswer("");
       refetch();
       toast.success("Your Answer Adeed Successfully");
+      if (user.role !== "admin") {
+        socketId.emit("notification", {
+          userId: user._id,
+          title: "New Answer Recieved",
+          message: `You question in course:${data[activeVideo].title}, got a new response!`,
+        });
+      }
     }
     if (addReviewSuccess) {
       setReview("");
       setRating(1);
       courseRefetch();
       toast.success("Your Review Adeed Successfully");
+      socketId.emit("notification", {
+        userId: user._id,
+        title: "New Review Recieved",
+        message: `${user?.name} has added a review on ${course?.name}`,
+      });
     }
     if (replyToReviewSuccess) {
       setReviewReply("");
@@ -288,6 +308,7 @@ const CourseContentMedia: FC<Props> = ({
               width={50}
               height={50}
               alt="avatar"
+              style={{ objectFit: "contain" }}
               className="rounded-full w-[50px] h-[50px] object-contain"
             />
             <div className="relative w-full ml-3">
@@ -326,6 +347,7 @@ const CourseContentMedia: FC<Props> = ({
               answer={answer}
               setAnswer={setAnswer}
               handleReplySubmit={handleReplySubmit}
+              questionId={questionId}
               setQuestionId={setQuestionId}
               answerCreationLoading={answerCreationLoading}
             />
@@ -344,6 +366,7 @@ const CourseContentMedia: FC<Props> = ({
                     width={50}
                     height={50}
                     alt="avatar"
+                    style={{ objectFit: "contain" }}
                     className="rounded-full w-[50px] h-[50px] object-contain"
                   />
                   <div className="w-full">
@@ -415,6 +438,7 @@ const CourseContentMedia: FC<Props> = ({
                           width={50}
                           height={50}
                           alt="avatar"
+                          style={{ objectFit: "contain" }}
                           className="rounded-full w-[50px] h-[50px] object-contain"
                         />
                         <div className="ml-3 text-black dark:text-white">
@@ -428,18 +452,19 @@ const CourseContentMedia: FC<Props> = ({
                         </div>
                       </div>
 
-                      {user.role === "admin" && (
-                        <span
-                          className={`${styles.label} cursor-pointer float-right`}
-                          onClick={() => {
-                            setIsReviewReply(true), setReviewId(item._id);
-                          }}
-                        >
-                          Add Reply
-                        </span>
-                      )}
+                      {user.role === "admin" &&
+                        item.reviewReplies.length === 0 && (
+                          <span
+                            className={`${styles.label} cursor-pointer float-right`}
+                            onClick={() => {
+                              setIsReviewReply(true), setReviewId(item._id);
+                            }}
+                          >
+                            Add Reply
+                          </span>
+                        )}
 
-                      {isReviewReply && (
+                      {isReviewReply && reviewId === item._id && (
                         <div className="flex w-full relative">
                           <textarea
                             cols={40}
@@ -482,6 +507,7 @@ const CourseContentMedia: FC<Props> = ({
                                 width={50}
                                 height={50}
                                 alt="avatar"
+                                style={{ objectFit: "contain" }}
                                 className="rounded-full w-[30px] h-[30px] object-contain"
                               />
                             </div>
@@ -523,6 +549,7 @@ const ComposeReply = ({
   answer,
   setAnswer,
   handleReplySubmit,
+  questionId,
   setQuestionId,
   answerCreationLoading,
 }: any) => {
@@ -535,6 +562,7 @@ const ComposeReply = ({
             item={item}
             answer={answer}
             setAnswer={setAnswer}
+            questionId={questionId}
             setQuestionId={setQuestionId}
             handleReplySubmit={handleReplySubmit}
             answerCreationLoading={answerCreationLoading}
@@ -549,10 +577,12 @@ const ReplyItem = ({
   item,
   answer,
   setAnswer,
+  questionId,
   setQuestionId,
   handleReplySubmit,
   answerCreationLoading,
 }: any) => {
+
   const [replyActive, setReplyActive] = useState(false);
   return (
     <>
@@ -563,6 +593,7 @@ const ReplyItem = ({
             width={50}
             height={50}
             alt="avatar"
+            style={{ objectFit: "contain" }}
             className="rounded-full w-[30px] h-[30px] object-contain"
           />
           <div className="pl-3 text-black dark:text-white">
@@ -595,7 +626,8 @@ const ReplyItem = ({
             {item?.questionReplies.length}
           </span>
         </div>
-        {replyActive && (
+
+        {replyActive && questionId === item._id && (
           <>
             {item?.questionReplies.map((item: any, index: number) => (
               <div
@@ -610,6 +642,7 @@ const ReplyItem = ({
                     width={50}
                     height={50}
                     alt="avatar"
+                    style={{ objectFit: "contain" }}
                     className="rounded-full w-[30px] h-[30px] object-contain"
                   />
                 </div>

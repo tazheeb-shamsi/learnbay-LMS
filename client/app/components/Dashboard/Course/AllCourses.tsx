@@ -33,12 +33,12 @@ const AllCourses = (props: Props) => {
 
   const columns = [
     // { field: "id", headerName: "ID", flex: 0.5 },
-    { field: "title", headerName: "Course Title", flex: 1 },
-    { field: "ratings", headerName: "Ratings", flex: 0.5 },
-    { field: "price", headerName: "Price", flex: 0.5 },
-    { field: "purchased", headerName: "Purchased", flex: 0.5 },
-    { field: "created_at", headerName: "Created At", flex: 0.5 },
-    // { field: "updated_at", headerName: "Updated At", flex: 0.5 },
+    { field: "title", headerName: "Course Title", flex: 0.6 },
+    { field: "price", headerName: "Price", flex: 0.3 },
+    { field: "ratings", headerName: "Ratings", flex: 0.3 },
+    { field: "purchased", headerName: "Purchased", flex: 0.3 },
+    { field: "created_at", headerName: "Created At", flex: 0.4 },
+    { field: "updated_at", headerName: "Updated At", flex: 0.4 },
     {
       field: " ",
       headerName: "Edit",
@@ -111,14 +111,15 @@ const AllCourses = (props: Props) => {
     await deleteCourse(id);
   };
   return (
-    <div className="mt-[120px] ml-5 ">
+    <div className="mt-[120px] ml-2 ">
       {isLoading ? (
         <Loader />
       ) : (
         <Box m="20px">
           <Box
             m="40px 0 0 0"
-            height="80vh"
+              height="80vh"
+              width='100%'
             sx={{
               "& .MuiDataGrid-root": { border: "none", outline: "none" },
               "& .css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon ": {

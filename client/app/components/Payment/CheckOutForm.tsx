@@ -11,12 +11,17 @@ import { redirect } from "next/navigation";
 import React, { FC, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
+import socketIO from "socket.io-client";
+const ENDPOINT = process.env.NEXT_PUBLIC_SOCKET_SERVER_URI || "";
+const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
+
 type Props = {
   setOpen: any;
   course: any;
+  user: any;
 };
 
-const CheckOutForm: FC<Props> = ({ setOpen, course }) => {
+const CheckOutForm: FC<Props> = ({ setOpen, course, user }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [message, setMessage] = useState<any>("");
@@ -48,7 +53,12 @@ const CheckOutForm: FC<Props> = ({ setOpen, course }) => {
   useEffect(() => {
     if (orderData) {
       setLoadUser(true);
-      redirect(`/couurse-access/${course._id}`);
+      socketId.emit("notification", {
+        title: "New Order Received",
+        message: `${user?.name} have placed order now!`,
+        userId: user._id,
+      });
+      redirect(`/course-access/${course._id}`);
     }
     if (error) {
       if ("data" in error) {

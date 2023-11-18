@@ -55,7 +55,7 @@ const CourseDetails: FC<Props> = ({
   };
   return (
     <div>
-      <div className="w-[90%] 800px:w-[90%] m-auto py-5 mb-5">
+      <div className="w-[90%] 800px:w-[90%] m-auto py-5 mb-5 ">
         <div className="w-full flex flex-col-reverse 800px:flex-row">
           <div className="w-full 800px:w-[65%] 800px:pr-5">
             <h1 className="font-Poppins text-[25px] font-[600] text-black dark:text-white">
@@ -168,6 +168,7 @@ const CourseDetails: FC<Props> = ({
                             width={50}
                             height={50}
                             alt="avatar"
+                            style={{ objectFit: "contain" }}
                             className="rounded-full w-[30px] h-[30px] object-contain"
                           />
                         </div>
@@ -185,7 +186,7 @@ const CourseDetails: FC<Props> = ({
                           {item.review}
                         </p>
                         <small className="text-[#000000d1] dark:text-[#ffffff83]">
-                          {formatDate(item.createdAt)}
+                          {formatDate(item.createdAt)} •
                         </small>
                       </div>
 
@@ -213,6 +214,7 @@ const CourseDetails: FC<Props> = ({
                               width={50}
                               height={50}
                               alt="avatar"
+                              style={{ objectFit: "contain" }}
                               className="rounded-full w-[30px] h-[30px] object-contain"
                             />
                           </div>
@@ -321,7 +323,11 @@ const CourseDetails: FC<Props> = ({
               <div className="w-full">
                 {stripePromise && clientSecret && (
                   <Elements stripe={stripePromise} options={{ clientSecret }}>
-                    <CheckOutForm setOpen={setOpen} course={course} />
+                    <CheckOutForm
+                      setOpen={setOpen}
+                      course={course}
+                      user={user}
+                    />
                   </Elements>
                 )}
               </div>

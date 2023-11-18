@@ -1,6 +1,7 @@
 "use client";
 import AllCourses from "@/app/components/Dashboard/Course/AllCourses";
 import DashboardHeader from "@/app/components/Dashboard/DashboardHeader";
+import DashboardHero from "@/app/components/Dashboard/DashboardHero";
 import DashboardSidebar from "@/app/components/Dashboard/Sidebar/DashboardSidebar";
 import AdminProtected from "@/app/hooks/adminProtected";
 import Heading from "@/app/utils/Heading";
@@ -22,7 +23,7 @@ const page = (props: Props) => {
             <DashboardSidebar />
           </div>
           <div className="w-[85%] ">
-            <DashboardHeader />
+            <DashboardHero />
             <AllCourses />
           </div>
         </div>

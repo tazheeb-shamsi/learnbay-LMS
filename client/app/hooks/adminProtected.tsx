@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 interface ProtectedProps {
@@ -13,3 +13,14 @@ export default function AdminProtected({ children }: ProtectedProps) {
     return isAdmin ? children : redirect("/");
   }
 }
+
+// export default function AdminProtected({ children }: ProtectedProps) {
+//   const { user } = useSelector((state: any) => state.auth);
+//   if (typeof window !== "undefined" && user) {
+//     const isAdmin = user.role === "admin";
+//     if (isAdmin) {
+//       return children;
+//     }
+//   }
+//   redirect("/");
+// }

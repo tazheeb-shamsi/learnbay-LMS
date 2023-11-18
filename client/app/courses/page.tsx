@@ -9,10 +9,11 @@ import Header from "../components/Header";
 import Heading from "../utils/Heading";
 import { styles } from "../styles/style";
 import CourseCard from "../components/Course/CourseCard";
+import Footer from "../components/Footer/Footer";
 
 type Props = {};
 
-const page = (props: Props) => {
+const Page = (props: Props) => {
   const searchParams = useSearchParams();
   const search = searchParams?.get("title");
 
@@ -43,7 +44,6 @@ const page = (props: Props) => {
   }, [data, category, search]);
 
   const categories = categoriesData?.layout?.categories;
-  console.log("categoriesData", categories);
   return (
     <div>
       {isLoading ? (
@@ -57,13 +57,13 @@ const page = (props: Props) => {
             setRoute={setRoute}
             route={route}
           />
-
           <div className="w-[95%] 800px:w-[85%] m-auto min-h-[90vh]">
             <Heading
               title="Learnbay - Courses"
               description="Leanbay is a platform specially for the Freshers and also for the Experienced Canditates to enhance there technical skill-sets."
               keywords="Programming, MERN, Full Stack Developer, Software Engineer, Web Development, MongoDb, Expres.js, React.js, Node.js, Javascript"
             />
+
             <br />
             <div className="w-full flex items-center flex-wrap">
               <div
@@ -109,6 +109,7 @@ const page = (props: Props) => {
                   <CourseCard item={item} key={index} />
                 ))}
             </div>
+            <Footer />
           </div>
         </>
       )}
@@ -116,4 +117,4 @@ const page = (props: Props) => {
   );
 };
 
-export default page;
+export default Page;

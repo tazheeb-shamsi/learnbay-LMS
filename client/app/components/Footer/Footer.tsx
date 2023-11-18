@@ -118,7 +118,7 @@ const Footer = (props: Props) => {
               </li>
             </ul>
           </div>
-          
+
           <div>
             <h3 className="text-[20px] font-[600] text-black dark:text-white pb-3">
               Contact Info
@@ -138,7 +138,7 @@ const Footer = (props: Props) => {
       </div>
       <br />
       <p className="text-center text-black dark:text-white">
-        Copyright ©️ 2023 Learnbay | All Rights Reserved
+        Copyright ©️ 2023 Learnbay®️ | All Rights Reserved
       </p>
     </footer>
   );

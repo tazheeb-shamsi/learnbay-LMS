@@ -5,6 +5,7 @@ import AdminProtected from "@/app/hooks/adminProtected";
 import Heading from "@/app/utils/Heading";
 import React from "react";
 import DashboardHeader from "@/app/components/Dashboard/DashboardHeader";
+import DashboardHero from "@/app/components/Dashboard/DashboardHero";
 
 type Props = {};
 
@@ -22,7 +23,7 @@ const page = (props: Props) => {
             <DashboardSidebar />
           </div>
           <div className="w-[85%] ">
-            <DashboardHeader />
+            <DashboardHero />
             <AllUsers  isTeam={false} />
           </div>
         </div>

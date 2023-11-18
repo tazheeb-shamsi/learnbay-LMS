@@ -19,8 +19,8 @@ const CourseCard: FC<Props> = ({ item, isProfile }) => {
           src={item.thumbnail?.url}
           width={500}
           height={300}
-          objectFit="contain"
-          className="rounded-lg"
+          objectFit="cover"
+          className="rounded-lg w-[600px] h-[200px]"
           alt=""
         />
         <br />

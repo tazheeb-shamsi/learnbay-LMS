@@ -18,10 +18,10 @@ export const navItemData = [
     title: "Policy",
     url: "/policy",
   },
-  {
-    title: "Contact",
-    url: "/contact",
-  },
+  // {
+  //   title: "Contact",
+  //   url: "/contact",
+  // },
   {
     title: "Faq",
     url: "/faq",

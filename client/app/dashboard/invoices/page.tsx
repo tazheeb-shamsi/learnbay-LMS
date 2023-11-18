@@ -6,6 +6,7 @@ import DashboardSidebar from "@/app/components/Dashboard/Sidebar/DashboardSideba
 import AdminProtected from "@/app/hooks/adminProtected";
 import Heading from "@/app/utils/Heading";
 import React from "react";
+import DashboardHero from "@/app/components/Dashboard/DashboardHero";
 
 type Props = {};
 
@@ -23,7 +24,7 @@ const page = (props: Props) => {
             <DashboardSidebar />
           </div>
           <div className="w-4/5 ">
-            <DashboardHeader />
+            <DashboardHero />
             <AllInvoives />
           </div>
         </div>

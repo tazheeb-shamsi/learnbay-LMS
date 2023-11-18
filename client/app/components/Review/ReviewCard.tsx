@@ -15,6 +15,7 @@ const ReviewCard: FC<Props> = ({ review }) => {
           src={review.avatar}
           width={50}
           height={50}
+          style={{ objectFit: "cover" }}
           className="w-[50px] h-[50px] rounded-full object-cover"
         />
 

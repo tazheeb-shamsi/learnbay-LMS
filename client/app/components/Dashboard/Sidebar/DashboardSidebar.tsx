@@ -13,12 +13,10 @@ import {
   Group,
   Groups,
   HomeOutlined,
-  Logout,
   OndemandVideo,
   PeopleOutline,
   Quiz,
   ReceiptOutlined,
-  Settings,
   ShoppingBag,
   VideoCall,
   Web,
@@ -42,29 +40,23 @@ const Item: FC<ItemProps> = ({ title, to, icon, selected, setSelected }) => {
       icon={icon}
     >
       <Typography className="!text-[16px] !font-Poppins">{title}</Typography>
-      <Link href={to}></Link>
+      <Link href={to} />
     </MenuItem>
   );
 };
 
 const DashboardSidebar = () => {
+  const { theme, setTheme } = useTheme();
   const { user } = useSelector((state: any) => state.auth);
-  const [logout, setLogout] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
-  const { theme, setTheme } = useTheme();
 
   useEffect(() => setMounted(true), []);
 
   if (!mounted) {
     return null;
   }
-
-  const logoutHandler = () => {
-    setLogout(true);
-  };
-
   return (
     <Box
       sx={{
@@ -79,16 +71,15 @@ const DashboardSidebar = () => {
         "& .pro-menu-item": {
           color: `${theme === "dark" ? "#ffff" : "#000"}`,
         },
-
+        "& .pro-menu-item.active": {
+          color: "#6870fa !important",
+        },
         "& .pro-inner-item": {
           padding: "5px 35px 5px 20px !important",
           opacity: 1,
         },
         "& .pro-inner-item:hover": {
           color: "#868dfd !important",
-        },
-        "& .pro-inner-item.active": {
-          color: "#6870fa !important",
         },
       }}
       className="!bg-white dar:bg-[#111c43] !important"
@@ -101,6 +92,7 @@ const DashboardSidebar = () => {
           left: "0px",
           width: isCollapsed ? "0%" : "16%",
           height: "100vh",
+          zIndex: 999999999999,
         }}
       >
         <Menu iconShape="square">
@@ -118,7 +110,7 @@ const DashboardSidebar = () => {
               >
                 <Link href="/">
                   <h3 className="text-[25px] font-Poppins dark:text-white text-black">
-                    Learnbay
+                    Learnbay®️
                   </h3>
                 </Link>
                 <IconButton
@@ -130,6 +122,7 @@ const DashboardSidebar = () => {
               </Box>
             )}
           </MenuItem>
+
           {!isCollapsed && (
             <Box mb="25px">
               <Box display="flex" justifyContent="center" alignItems="center">
@@ -175,7 +168,7 @@ const DashboardSidebar = () => {
             <Typography
               variant="h5"
               sx={{ m: "15px 0 5px 25px" }}
-              className="!text-[18px]  text-white capitalize !font-[400]"
+              className="!text-[18px] text-black dark:text-white capitalize !font-[400]"
             >
               {!isCollapsed && "Information"}
             </Typography>
@@ -281,27 +274,6 @@ const DashboardSidebar = () => {
               title="Users Anaytics"
               to="/dashboard/users-analytics"
               icon={<Group />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            {/* <Typography
-              variant="h5"
-              sx={{ m: "15px 0 5px 25px" }}
-              className="!text-[18px] text-black dark:text-[#ffffffc1] capitalize !font-[400]"
-            >
-              {!isCollapsed && "Extras"}
-            </Typography>
-            <Item
-              title="Course Anaytics"
-              to="/dashboard/settings"
-              icon={<Settings />}
-              selected={selected}
-              setSelected={setSelected}
-            /> */}
-            <Item
-              title="Logout"
-              to="/"
-              icon={<Logout />}
               selected={selected}
               setSelected={setSelected}
             />

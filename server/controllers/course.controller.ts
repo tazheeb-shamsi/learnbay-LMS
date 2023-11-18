@@ -299,8 +299,8 @@ export const addAnswerToTheQuestion = catchAsyncError(
         //sending notification to Instructor...
         await notificationModel.create({
           user: req.user?._id,
-          title: "New Question Recieved",
-          message: `You question in course:${courseContent?.title}, have new response !`,
+          title: "New Answer Recieved",
+          message: `You question in course:${courseContent?.title}, got a new response!`,
         });
       } else {
         const data = {
@@ -414,7 +414,7 @@ export const addReplyToReview = catchAsyncError(
         new ErrorHandler("Course not found.", 404);
       }
 
-      const getReview = course?.reviews?.find(
+      const getReview: any = course?.reviews?.find(
         (rev: any) => rev._id.toString() === reviewId
       );
 
