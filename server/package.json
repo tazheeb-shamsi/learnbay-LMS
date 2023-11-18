@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Learning Management System",
   "main": "server.js",
+  "engines": {
+    "node": ">=14.20.1"
+  },
   "scripts": {
     "start": "ts-node-dev --respawn --transpile-only server.ts"
   },
