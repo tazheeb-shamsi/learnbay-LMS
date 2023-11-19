@@ -1,6 +1,7 @@
 import cloudinary from "cloudinary";
 import { catchAsyncError } from "../middleware/catchAsyncError";
 import ErrorHandler from "../utils/ErrorHandler";
+import { NextFunction, Request, Response } from "express";
 import { createCourse, getAllCoursesService } from "../services/course.service";
 import courseModel from "../models/course.model";
 import { redis } from "../utils/redis";
@@ -10,7 +11,6 @@ import path from "path";
 import sendEmail from "../utils/sendMail";
 import notificationModel from "../models/notification.model";
 import axios from "axios";
-import { NextFunction, Request, Response } from "express";
 
 // Create course   -- only for admin
 export const addCourse = catchAsyncError(
