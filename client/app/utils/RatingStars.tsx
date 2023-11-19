@@ -19,7 +19,7 @@ const RatingStars: FC<Props> = ({ rating }) => {
           className="mr-2 cursor-pointer"
         />
       );
-    } else if (i === Math.ceil(rating) && !Integer(rating)) {
+    } else if (i === Math.ceil(rating) && !Number.isInteger(rating)) {
       stars.push(
         <BsStarHalf
           key={i}
@@ -39,6 +39,7 @@ const RatingStars: FC<Props> = ({ rating }) => {
       );
     }
   }
+
   return (
     <div className="flex mt-1 ml-2 800px:mt-0 800px:ml-0  dark:text-white text-black">
       {stars}

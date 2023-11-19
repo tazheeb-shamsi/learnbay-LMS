@@ -11,11 +11,10 @@ const Courseplayer: FC<Props> = ({ videoUrl }) => {
     otp: "",
     playbackInfo: "",
   });
-  const url = process.env.NEXT_PUBLIC_SERVER_URI;
 
   useEffect(() => {
     axios
-      .post(`${process.env.NEXT_PUBLIC_SERVER_URI}getVdoCipherOTP`, {
+      .post("https://learnbay-lms.onrender.com/api/v1/getVdoCipherOTP", {
         videoId: videoUrl,
       })
       .then((response) => {
