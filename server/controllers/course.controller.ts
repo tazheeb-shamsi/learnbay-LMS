@@ -1,4 +1,3 @@
-import { Request, Response, NextFunction } from "express";
 import cloudinary from "cloudinary";
 import { catchAsyncError } from "../middleware/catchAsyncError";
 import ErrorHandler from "../utils/ErrorHandler";
@@ -11,6 +10,7 @@ import path from "path";
 import sendEmail from "../utils/sendMail";
 import notificationModel from "../models/notification.model";
 import axios from "axios";
+import { NextFunction, Request, Response } from "express";
 
 // Create course   -- only for admin
 export const addCourse = catchAsyncError(
