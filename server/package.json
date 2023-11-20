@@ -8,8 +8,7 @@
     "node": ">=14.20.1"
   },
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only server.ts",
-    "start": "node build/server.js"
+    "start": "ts-node-dev --respawn --transpile-only server.ts"
   },
   "author": "tazheeb-shamsi",
   "license": "ISC",
