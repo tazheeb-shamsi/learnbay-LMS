@@ -1,14 +1,9 @@
-import express from "express";
+const express = require("express ");
 import { updateAccessToken } from "../controllers/user.controller";
 import { isAuthenticated } from "../middleware/auth";
 
 const contactRoute = express.Router();
 
-contactRoute.post(
-  "/contact",
-  updateAccessToken,
-  isAuthenticated,
-  contactUs
-);
+// contactRoute.post("/contact", updateAccessToken, isAuthenticated, contactUs);
 
 export default contactRoute;

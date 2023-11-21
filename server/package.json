@@ -2,7 +2,6 @@
   "name": "lms-server",
   "version": "1.0.0",
   "description": "Learning Management System",
-  "type": "module",
   "main": "server.js",
   "engines": {
     "node": ">=14.20.1"

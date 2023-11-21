@@ -1,8 +1,8 @@
 import { app } from "./app";
 import { v2 as cloudinary } from "cloudinary";
-import http from "http";
+const http = require ("http");
 import { connectDB } from "./utils/db";
-import dotenv from "dotenv";
+const dotenv = require ("dotenv");
 import { initSocketServer } from "./socketServer";
 
 dotenv.config();

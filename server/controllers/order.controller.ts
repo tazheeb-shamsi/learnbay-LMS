@@ -7,14 +7,14 @@ import courseModel from "../models/course.model";
 import { getAllOrderService, newOrder } from "../services/order.service";
 
 import sendEmail from "../utils/sendMail";
-import ejs from "ejs";
-import path from "path";
+const ejs = require("ejs");
+const path = require("path");
 import notificationModel from "../models/notification.model";
 
-import dotenv from "dotenv";
 import stripe from "stripe";
 import { redis } from "../utils/redis";
 
+const dotenv = require("dotenv");
 dotenv.config();
 
 const stripeSecretKey: any = process.env.STRIPE_SECRET_KEY;

@@ -1,4 +1,4 @@
-import express from "express";
+const express = require("express ");
 import { authorizeRoles, isAuthenticated } from "../middleware/auth";
 import {
   createOrder,
@@ -27,6 +27,5 @@ orderRoute.get(
 
 orderRoute.get("/payment/stripepublishablekey", sendStripePublishableKey);
 orderRoute.post("/payment", isAuthenticated, newPayment);
-
 
 export default orderRoute;

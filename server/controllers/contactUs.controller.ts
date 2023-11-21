@@ -1,8 +1,8 @@
 import { catchAsyncError } from "../middleware/catchAsyncError";
 import { NextFunction, Request, Response } from "express";
 import ErrorHandler from "../utils/ErrorHandler";
-import ejs from "ejs";
-import path from "path";
+const ejs = require("ejs");
+const  path= require("path");
 import sendEmail from "../utils/sendMail";
 
 export const contactUs = catchAsyncError(

@@ -1,4 +1,4 @@
-import cloudinary from "cloudinary";
+const cloudinary =  require( "cloudinary");
 import { catchAsyncError } from "../middleware/catchAsyncError";
 import ErrorHandler from "../utils/ErrorHandler";
 import { NextFunction, Request, Response } from "express";
@@ -6,8 +6,8 @@ import { createCourse, getAllCoursesService } from "../services/course.service";
 import courseModel from "../models/course.model";
 import { redis } from "../utils/redis";
 import mongoose from "mongoose";
-import ejs from "ejs";
-import path from "path";
+const ejs = require("ejs");
+const path = require("path");
 import sendEmail from "../utils/sendMail";
 import notificationModel from "../models/notification.model";
 import axios from "axios";
@@ -35,6 +35,7 @@ export const addCourse = catchAsyncError(
   }
 );
 
+// update course   -- only for admin
 export const updateCourse = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -175,7 +176,7 @@ export const getCourseContentByUser = catchAsyncError(
       const userCourseList = req.user?.courses;
       const courseId = req.params.id;
       const isCourseExist = userCourseList?.find(
-        (course: any) => course._id === courseId
+        (course: any) => course._id.toString() === courseId.toString()
       );
       if (!isCourseExist) {
         return next(
