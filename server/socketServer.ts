@@ -1,15 +1,15 @@
-import http from "http";
-import { Server as SocketIOServer } from "socket.io";
+const http = require("http");
+const { Server: SocketIOServer } = require("socket.io");
 
-export const initSocketServer = (server: http.Server) => {
+export const initSocketServer = (server) => {
   const io = new SocketIOServer(server);
 
   io.on("connection", (socket) => {
     console.log("🎉 A user connected");
 
-    //Listen for incoming notification events from frontend
+    // Listen for incoming notification events from frontend
     socket.on("notification", (data) => {
-      //brodcasting the data to all connected clients (adminDashboard)
+      // Broadcasting the data to all connected clients (adminDashboard)
       io.emit("newNotification", data);
     });
 

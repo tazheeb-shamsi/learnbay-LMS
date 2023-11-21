@@ -2,10 +2,9 @@ import { app } from "./app";
 import { v2 as cloudinary } from "cloudinary";
 const http = require ("http");
 import { connectDB } from "./utils/db";
-const dotenv = require ("dotenv");
+require("dotenv").config();
 import { initSocketServer } from "./socketServer";
 
-dotenv.config();
 const PORT = process.env.PORT || 8000;
 
 const server = http.createServer(app);

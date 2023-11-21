@@ -1,7 +1,7 @@
 import { UserInterface } from "../models/user.model";
 import { Response } from "express";
 import { redis } from "./redis";
-import dotenv from "dotenv";
+require("dotenv").config();
 dotenv.config();
 
 const ACCESS_TOKEN_EXPIRE = process.env.ACCESS_TOKEN_EXPIRE;

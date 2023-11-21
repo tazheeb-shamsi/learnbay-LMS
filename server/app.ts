@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import dotenv from "dotenv";
+require("dotenv").config();
 import { ErrorMiddleware } from "./middleware/error";
 import userRouter from "./routes/user.route";
 import courseRouter from "./routes/course.route";

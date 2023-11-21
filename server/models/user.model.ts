@@ -1,10 +1,9 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
-const bcrypt = require( "bcryptjs");
+const bcrypt = require("bcryptjs");
 
-const dotenv = require("dotenv");
-dotenv.config();
+require("dotenv").config();
 const JWT = require ("jsonwebtoken");
-dotenv.config();
+
 
 const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
 const REFRESH_TOKEN = process.env.REFRESH_TOKEN;

@@ -1,5 +1,4 @@
-
-import { Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { catchAsyncError } from "../middleware/catchAsyncError";
 import courseModel from "../models/course.model";
 

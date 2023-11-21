@@ -11,11 +11,11 @@ const ejs = require("ejs");
 const path = require("path");
 import notificationModel from "../models/notification.model";
 
+require("dotenv").config();
 import stripe from "stripe";
 import { redis } from "../utils/redis";
 
-const dotenv = require("dotenv");
-dotenv.config();
+
 
 const stripeSecretKey: any = process.env.STRIPE_SECRET_KEY;
 const stripeInstance = new stripe(stripeSecretKey);

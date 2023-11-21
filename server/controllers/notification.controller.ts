@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { catchAsyncError } from "../middleware/catchAsyncError";
 import ErrorHandler from "../utils/ErrorHandler";
 import notificationModel from "../models/notification.model";
-const  cron = require( "node-cron");
+const cron = require("node-cron");
 
 // get all notifications -- only for instructor(admin)
 export const getAllNotifications = catchAsyncError(

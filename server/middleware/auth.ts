@@ -4,7 +4,7 @@ import ErrorHandler from "../utils/ErrorHandler";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { redis } from "../utils/redis";
 
-import dotenv from "dotenv";
+require("dotenv").config();
 dotenv.config();
 
 const ACCESS_TOKEN = process.env.ACCESS_TOKEN;

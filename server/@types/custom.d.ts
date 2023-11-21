@@ -1,4 +1,6 @@
-import { Request } from "express";
+// import { Request } from "express";
+const { Request } = require("express");
+
 import { UserInterface } from "../models/user.model";
 
 declare global {

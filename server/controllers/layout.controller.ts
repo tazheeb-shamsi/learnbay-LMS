@@ -1,4 +1,4 @@
-const cloudinary = require("cloudinary");
+const cloudinary = require ("cloudinary");
 import { NextFunction, Request, Response } from "express";
 import ErrorHandler from "../utils/ErrorHandler";
 import { catchAsyncError } from "../middleware/catchAsyncError";
