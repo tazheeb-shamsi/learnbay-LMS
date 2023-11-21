@@ -67,7 +67,7 @@ const courseDataSchema = new Schema<CourseDataInterface>({
   suggestions: String,
 });
 
-interface CourseInterface extends Document {
+export interface CourseInterface extends Document {
   name: string;
   description: string;
   categories: string;

@@ -1,4 +1,4 @@
-import "../../server/@types/custom";
+import "../@types/custom";
 const cloudinary = require("cloudinary");
 import { catchAsyncError } from "../middleware/catchAsyncError";
 import ErrorHandler from "../utils/ErrorHandler";
@@ -171,6 +171,11 @@ export const getSingleCourse = catchAsyncError(
 );
 
 // get course content -- only for valid user
+// interface userCourseInterface {
+//   user?: {
+//     courses: CourseInterface[];
+//   };
+// }
 export const getCourseContentByUser = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -217,7 +222,7 @@ export const addQuestion = catchAsyncError(
       );
 
       if (!courseContent) {
-        return next(new ErrorHandler("nvalid content id", 400));
+        return next(new ErrorHandler("invalid content id", 400));
       }
 
       //create a new question object
@@ -454,7 +459,7 @@ export const addReplyToReview = catchAsyncError(
 export const getAllCoursesByAdmin = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      getAllCoursesService(res);
+      await getAllCoursesService(res);
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
     }

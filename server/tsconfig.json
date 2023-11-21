@@ -7,6 +7,5 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["../server/**/*.ts"],
   "types": ["node", "express"]
 }
