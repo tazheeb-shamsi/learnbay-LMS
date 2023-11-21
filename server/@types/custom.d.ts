@@ -1,5 +1,4 @@
-// import { Request } from "express";
-const { Request } = require("express");
+import { Request } from "express";
 
 import { UserInterface } from "../models/user.model";
 
