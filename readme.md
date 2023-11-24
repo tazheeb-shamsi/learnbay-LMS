@@ -1,4 +1,4 @@
-![Learnbay](Screenshot%202023-11-21%20201032.png)
+![Learnbay]([Screenshot%202023-11-21%20201032.png](https://github.com/tazheeb-shamsi/Learnbay--frontend/blob/master/Screenshot%202023-11-21%20201032.png))
 
 This is a [Learnbay](https://learnbay.vercel.app/) LMS full stack project based on Nwxt.js, mongoDb, express, recat.js , redis and node.js.
 
